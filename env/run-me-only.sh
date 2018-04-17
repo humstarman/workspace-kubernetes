@@ -1,6 +1,7 @@
 #!/bin/bash
 
-MASTER="192.168.0.41 192.168.0.42 192.168.0.43"
+MASTER="172.31.78.215 172.31.78.216 172.31.78.217"
+NET_ID="172.31.78"
 
 mkdir -p ./tmp
 BOOTSTRAP_TOKEN=$(head -c 16 /dev/urandom | od -An -t x | tr -d ' ')
@@ -16,8 +17,8 @@ echo -n -e "${BOOTSTRAP_TOKEN},kubelet-bootstrap,10001,\"system:kubelet-bootstra
 ansible all -m copy -a "src=./tmp/token.csv dest=/etc/kubernetes"
 
 
-ansible master -m script -a "./put-this-ip.sh 192.168.0"
-ansible node -m script -a "./put-node-ip.sh 192.168.0"
+ansible master -m script -a "./put-this-ip.sh $NET_ID"
+#ansible node -m script -a "./put-node-ip.sh $NET_ID"
 
 NAME=etcd
 
