@@ -1,5 +1,17 @@
 #!/bin/bash
 
+if [ -x "$(command -v apt-get)" ]; then
+  export DEBIAN_FRONTEND=noninteractive
+  apt-get update -y
+  apt-get install -y socat
+fi
+if [ -x "$(command -v yum)" ]; then
+  yum makecache
+  yum install -y epel-release
+  yum makecache
+  yum install -y socat
+fi
+
 kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
 IP=$(kubectl get -n kube-system svc tiller-deploy --template="{{ .spec.clusterIP }}")
 PORT=$(kubectl get -n kube-system svc tiller-deploy --template="{{ (index .spec.ports 0).port }}")
