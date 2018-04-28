@@ -9,7 +9,7 @@ ExecStart=/usr/local/bin/kube-apiserver \
   --admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota \
   --advertise-address=${NODE_IP} \
   --bind-address=0.0.0.0 \
-  --insecure-bind-address=${NODE_IP} \
+  --insecure-bind-address=0.0.0.0 \
   --authorization-mode=Node,RBAC \
   --runtime-config=api/all=rbac.authorization.kubernetes.io/v1 \
   --kubelet-https=true \
