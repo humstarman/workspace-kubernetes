@@ -82,10 +82,26 @@ ExecStart=/bin/sh \\
 [Install]
 WantedBy=multi-user.target
 EOF
+cat > /etc/docker/daemon.json << EOF
+{
+  "data-root": "/opt/docker",
+  "registry-mirror" : [
+    "https://docker.mirrors.ustc.edu.cn",
+    "hub-mirror.c.163.com"
+  ],
+  "insecure-registries" : [
+    "192.168.0.0/16",
+    "172.0.0.0/8",
+    "10.0.0.0/8"
+  ],
+  "debug" : true,
+  "experimental" : true,
+  "max-concurrent-downloads" : 10
+}
+EOF
 
 systemctl daemon-reload
 systemctl enable docker
 systemctl start docker
 
 systemctl enable docker-iptables.service
-systemctl start docker-iptables.service
