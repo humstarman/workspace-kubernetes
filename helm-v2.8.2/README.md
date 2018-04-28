@@ -1,6 +1,7 @@
 0 install helm
 ===
-		download helm from gitub
+		download helm from github, and
+		cp the binary file to /usr/local/bin
 1 create serviceAccount and clusterRoleBinding for tiller
 ===
 ```console
