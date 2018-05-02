@@ -1,7 +1,7 @@
 #!/bin/bash
 
-FROM=v1.9.2
-TO=v1.9.3
+FROM=v1.9.5
+TO=v1.10.2
 DEST=/usr/local/bin
 ARCHIVE=/opt/app/k8s-bin
 
