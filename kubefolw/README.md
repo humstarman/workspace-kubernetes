@@ -1,0 +1,39 @@
+0 Prerequisites
+===
+	the version of kubeflow is v0.1.2
+	Before installing kubeflow, following are needed:
+* ansible
+* kubernetes
+* ksonnet 
+	and, the installation of ksonnet can be implemeted as:
+1. download binary file from github
+2. unzip and cp the binary file to $PATH
+
+---
+1 Generate my-kubeflow directory
+===
+	run:
+```console
+./init.sh
+```
+
+---
+2 Prepare images
+===
+	for some reasons, one can not get images directly.
+
+---
+3 Pull the images and rename
+===
+	run:
+```console
+./pull-and-tag.sh
+```
+
+---
+4 deploy tensorflow on kubernetes
+===
+1. cp the script cp-to-kubeflow-then-run.sh into my-kubeflow directory
+2. run
+
+---
