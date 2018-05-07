@@ -39,7 +39,10 @@ and, the installation of ksonnet can be implemeted as:
 ---
 4 deploy tensorflow on kubernetes
 ===
-1. cp the script cp-to-kubeflow-then-run.sh into my-kubeflow directory
-2. run
+1. cd to my-kubeflow directory
+2. run:
+```console
+./cp-to-kubeflow-then-run.sh
+```
 
 ---

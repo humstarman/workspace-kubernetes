@@ -12,3 +12,6 @@ VERSION=v0.1.2
 # Initialize a ksonnet app. Set the namespace for it's default environment.
 APP_NAME=my-kubeflow
 ks init ${APP_NAME}
+
+# cp the deployment script into the ${APP_NAME} directory
+cp ./cp-to-kubeflow-then-run.sh ${APP_NAME}
