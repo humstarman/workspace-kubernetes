@@ -7,9 +7,9 @@
 * ksonnet 
 <div>
 and, the installation of ksonnet can be implemeted as:
+</div>
 1. download binary file from github
 2. unzip and cp the binary file to $PATH
-</div>
 
 ---
 1 Generate my-kubeflow directory
