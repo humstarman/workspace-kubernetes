@@ -26,8 +26,17 @@ kubespark/spark-shuffle:v2.2.0-kubernetes-0.5.0"
 
 function pull_distribute_tag() {
   IMAGE=$1
-  docker pull $IMAGE 
-  echo "$(date) - [INFO] - image $IMAGE pulled."
+  NAME=${IMAGE%%:*}
+  TAG=${IMAGE##*:}
+  [ -z "$TAG" ] && TAG="latest"
+  #echo $NAME
+  #echo $TAG
+  if [[ -n "$(docker images | grep $NAME)"  && -n "$(docker images | grep $TAG)" ]]; then
+    echo "$(date) - [WARN] - $IMAGE already existed."
+  else
+    docker pull $IMAGE 
+    echo "$(date) - [INFO] - image $IMAGE pulled."
+  fi
   NAME=${IMAGE##*/}
   docker tag $IMAGE ${LOCAL_REPO}/$NAME
   echo "$(date) - [INFO] - rename $IMAGE as ${LOCAL_REPO}/$NAME."
@@ -42,16 +51,5 @@ function pull_distribute_tag() {
 }
 
 for IMAGE in $IMAGES; do
-  NAME=${IMAGE%%:*}
-  TAG=${IMAGE##*:}
-  #echo $NAME
-  #echo $TAG
-  if [[ -n "$(docker images | grep $NAME)"  && -n "$(docker images | grep $TAG)" ]]; then
-    echo "$(date) - [WARN] - $IMAGE already existed."
-  else
-    pull_distribute_tag $IMAGE
-  fi
-  while true; do
-    pull_distribute_tag $IMAGE && break;
-  done
+  pull_distribute_tag $IMAGE
 done
