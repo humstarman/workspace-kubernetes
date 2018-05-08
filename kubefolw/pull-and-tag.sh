@@ -22,7 +22,7 @@ gcr.io/kubeflow/tf-benchmarks-cpu:v20171202-bdab599-dirty-284af3 \
 gcr.io/kubeflow/tf-benchmarks-gpu:v20171202-bdab599-dirty-284af3 \
 gcr.io/cloud-solutions-group/esp-sample-app:1.0.0 \
 gcr.io/google_containers/spartakus-amd64:v1.0.0 \
-envoy:v20180309-0fb4886b463698702b6a08955045731903a18738 \
+gcr.io/kubeflow-images-public/envoy:v20180309-0fb4886b463698702b6a08955045731903a18738 \
 gcr.io/kubeflow-images-public/tf_operator:v20180329-a7511ff \
 gcr.io/kubeflow/jupyterhub-k8s:1.0.1 \
 gcr.io/kubeflow-images-public/tf_operator:v20180226-403 \
