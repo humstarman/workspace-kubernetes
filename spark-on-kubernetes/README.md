@@ -9,7 +9,7 @@
 bin/spark-submit \
   --deploy-mode cluster \
   --class org.apache.spark.examples.SparkPi \
-  --master k8s://https://172.31.78.216:6443 \
+  --master k8s://https://${kube-master-ip}:${kube-master-port} \
   --conf spark.kubernetes.authenticate.driver.serviceAccountName=spark \
   --kubernetes-namespace default \
   --conf spark.executor.instances=5 \
@@ -25,7 +25,7 @@ bin/spark-submit \
 ```console
 bin/spark-submit \
   --deploy-mode cluster \
-  --master k8s://https://172.31.78.216:6443 \
+  --master k8s://https://${kube-master-ip}:${kube-master-port} \
   --conf spark.kubernetes.authenticate.driver.serviceAccountName=spark \
   --kubernetes-namespace default \
   --conf spark.executor.instances=5 \
