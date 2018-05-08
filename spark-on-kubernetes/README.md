@@ -1,10 +1,29 @@
-0 
+0 Prerequisites 
 ===
-	cmd for testing
+* this directory is for spark-v2.2.0-kubernetes-0.5.0
+* Java, and set enviroment variable JAVA_HOME
+* a spark distribution with Kubernetes support, downloading from https://github.com/apache-spark-on-k8s/spark/releases
+---
+1 Installation 
+===
+1. 
+	run 
+```console
+./run-me-first.sh
+```
+	to generate the service account and cluster role binding to use.
+2.
+	run
+```console
+./prepare-images.sh
+```
+	to get the images.
 
 ---
-1 Java
+2 Testing
 ===
+2.1 Java
+---
 ```console
 bin/spark-submit \
   --deploy-mode cluster \
@@ -19,9 +38,8 @@ bin/spark-submit \
   local:///opt/spark/examples/jars/spark-examples_2.11-2.2.0-k8s-0.5.0.jar
 ```
 
+2.2 Python
 ---
-2 Python
-===
 ```console
 bin/spark-submit \
   --deploy-mode cluster \
@@ -36,3 +54,5 @@ bin/spark-submit \
   --py-files local:///opt/spark/examples/src/main/python/sort.py \
   local:///opt/spark/examples/src/main/python/pi.py 10
 ```
+
+---
