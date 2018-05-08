@@ -1,6 +1,6 @@
 0 Prerequisites 
 ===
-* this directory is for spark-v2.2.0-kubernetes-0.5.0
+* this directory is for spark-v2.2.0-kubernetes-0.5.0-hadoop-2.7.3
 * Java, and set enviroment variable JAVA_HOME
 * a spark distribution with Kubernetes support, downloading from https://github.com/apache-spark-on-k8s/spark/releases
 ---
