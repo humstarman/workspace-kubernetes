@@ -31,7 +31,7 @@ function pull_distribute_tag() {
   [ -z "$TAG" ] && TAG="latest"
   #echo $NAME
   #echo $TAG
-  if [[ -n "$(docker images | grep $NAME)"  && -n "$(docker images | grep $TAG)" ]]; then
+  if [ -n "$(docker images | grep $NAME | grep $TAG)" ]; then
     echo "$(date) - [WARN] - $IMAGE already existed."
   else
     docker pull $IMAGE 
