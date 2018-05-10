@@ -1,3 +1,5 @@
+For kubernetes v1.10
+===
 0.prepare 
 ===
 		set two groups for ansible:
