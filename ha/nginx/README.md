@@ -6,7 +6,7 @@ Run:
 ```
 ./run-me-only.sh
 ```
-to generate nginx.conf and nginx-proxy.service.
-Then, use `systemctl` to run the proxy.
+to generate nginx.conf and nginx-proxy.service.  
+Then, use `systemctl` to run the proxy.  
 
 ---
