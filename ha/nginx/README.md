@@ -3,8 +3,8 @@ Kubernetes High Availability Framework Implemented by Ngxin
 This component should be deployed on nodes,  
 and `MUST NOT` be deployed on masters!   
 ```
-- [x] node
-- [ ] master
+- [y] node
+- [x] master
 ```
 Run:
 ```
