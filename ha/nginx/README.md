@@ -4,6 +4,7 @@ This component should be deployed on nodes,
 and `MUST NOT` be deployed on masters!   
 - [x] node
 - [ ] master  
+
 Run:
 ```
 ./run-me-only.sh
