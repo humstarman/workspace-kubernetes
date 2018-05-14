@@ -16,9 +16,9 @@ fi
 LOCAL_REPO="172.31.78.217:5000"
 DOCKER_HUB="lowyard"
 
-GO_IMAGES="$*"
-if [ -z "$GO_IMAGES" ]; then
-  GO_IMAGES="k8s.gcr.io/hyperkube:v1.0.7 \
+IMAGES="$*"
+if [ -z "$IMAGES" ]; then
+  IMAGES="k8s.gcr.io/hyperkube:v1.0.7 \
   gcr.io/kubeflow-images-public/tf-model-server-http-proxy:v20180327-995786ec \
   gcr.io/kubeflow-images-public/tf-model-server-cpu:v20180327-995786ec \
   gcr.io/kubeflow-images-public/tf-model-server-gpu:v20180327-995786ec \
@@ -34,8 +34,8 @@ if [ -z "$GO_IMAGES" ]; then
   gcr.io/kubeflow/tensorflow-notebook-cpu"
 fi
 
-for GO_IMAGE in $GO_IMAGES; do
-  NAME=${GO_IMAGE##*/}
+function pull_distribute_tag() {
+  NAME=${IMAGE##*/}
   #echo $NAME
   PULLABLE=${DOCKER_HUB}/$NAME 
   REPOSITORY=${PULLABLE%%:*}
@@ -53,8 +53,12 @@ for GO_IMAGE in $GO_IMAGES; do
   echo "$(date) - [INFO] - image ${LOCAL_REPO}/$NAME pushed."
   ansible all -m shell -a "docker pull ${LOCAL_REPO}/$NAME"
   echo "$(date) - [INFO] - image ${LOCAL_REPO}/$NAME pulled at all nodes."
-  ansible all -m shell -a "docker tag ${LOCAL_REPO}/$NAME $GO_IMAGE"
-  echo "$(date) - [INFO] - rename image ${LOCAL_REPO}/$NAME as ${GO_IMAGE} at all nodes."
+  ansible all -m shell -a "docker tag ${LOCAL_REPO}/$NAME $IMAGE"
+  echo "$(date) - [INFO] - rename image ${LOCAL_REPO}/$NAME as ${IMAGE} at all nodes."
   ansible all -m shell -a "docker rmi ${LOCAL_REPO}/$NAME"
   echo "$(date) - [INFO] - delete temporary image ${LOCAL_REPO}/$NAME at all nodes."
+}
+
+for IMAGE in $IMAGES; do
+  pull_distribute_tag $IMAGE
 done
