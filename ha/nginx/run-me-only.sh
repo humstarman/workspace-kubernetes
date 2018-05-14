@@ -3,7 +3,7 @@
 set -e
 
 if [ ! -x "$(command -v docker)" ]; then
-  echo "$(date) - [EOOR] - no docker installed!"
+  echo "$(date) - [ERROR] - no docker installed!"
   exit 1
 fi
 
