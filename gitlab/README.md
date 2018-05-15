@@ -49,3 +49,5 @@ $ kubectl create -f kubernetes/gitlab.yaml
 ```
 
 创建所有这些服务和部署后，等待 3 到 5 分钟。可以在 Kubernetes UI 上检查部署状态。运行 kubectl proxy 并访问 URL 'http://127.0.0.1:8001/ui  '，以检查 GitLab 容器何时准备就绪。
+
+对于`local-volumes`，切勿提前手动创建文件夹。
