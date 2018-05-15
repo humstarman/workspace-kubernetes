@@ -39,7 +39,7 @@ x.x.x.x          Ready     17h       v1.5.3-2+be7137fd3ad68f
 
 ##### 在容器中使用 PostgreSQL
 
-如果使用容器映像来运行 PostgreSQL，可对您的 Kubernetes 集群运行以下命令或运行快速入门脚本 `bash quickstart.sh`。
+如果使用容器映像来运行 PostgreSQL，可对您的 Kubernetes 集群运行以下命令。
 
 ```bash
 $ kubectl create -f local-volumes.yaml
@@ -50,4 +50,4 @@ $ kubectl create -f gitlab.yaml
 
 创建所有这些服务和部署后，等待 3 到 5 分钟。可以在 Kubernetes UI 上检查部署状态。运行 kubectl proxy 并访问 URL 'http://127.0.0.1:8001/ui  '，以检查 GitLab 容器何时准备就绪。
 
-对于`local-volumes`，切勿提前手动创建文件夹。
+> 备注：对于`local-volumes`，切勿提前手动创建文件夹。
