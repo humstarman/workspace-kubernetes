@@ -2,6 +2,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
+  namespace: gitlab
   name: local-volume-1
   labels:
     type: local
@@ -17,6 +18,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
+  namespace: gitlab
   name: local-volume-2
   labels:
     type: local
@@ -32,6 +34,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
+  namespace: gitlab
   name: local-volume-3
   labels:
     type: local

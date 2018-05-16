@@ -2,6 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: gitlab
   name: redis
   labels:
     app: gitlab
@@ -16,6 +17,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  namespace: gitlab
   name: redis-claim
   labels:
     app: gitlab
@@ -29,6 +31,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+  namespace: gitlab
   name: redis
   labels:
     app: gitlab

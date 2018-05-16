@@ -9,10 +9,11 @@ data:
 
     [[runners]]
       name = "Kubernetes Runner"
-      url = "https://gitlab.com/ci"
-      token = "...."
+      url = "http://120.27.22.209:8089/ci"
+      token = "-9zuoJx3cyiVtE5yKSst"
       executor = "kubernetes"
       [runners.kubernetes]
         namespace = "gitlab"
-        image = "busybox"
-
+        cert_file = "/etc/ssl/kubernetes/kubernetes.pem"
+        key_file = "/etc/ssl/kubernetes/kubernetes-key.pem"
+        ca_file = "/etc/ssl/kubernetes/ca.pem"
