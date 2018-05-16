@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: my-k8s-ingress
+  namespace: kube-system 
+spec:
+  rules:
+  - host: my.k8s.me
+    http:
+      paths:
+      - path: /console
+        backend:
+          serviceName: kubernetes-dashboard 
+          servicePort: 443
