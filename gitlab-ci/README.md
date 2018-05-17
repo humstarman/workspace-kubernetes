@@ -16,4 +16,15 @@ kubectl create -f gitlab-core/namespace.yaml
 kubectl create -f gitlab-core/local-volumes.yaml
 ```
 
-Deploy 
+Deploy PostgreSQL and Redis
+```bash
+kubectl create -f gitlab-core/postgres.yaml
+kubectl create -f gitlab-core/redis.yaml
+```
+
+Before deploying Gitlab, some extra works are requiered.  
+On Kubernetes, Gitlab can server in forms of 
+- {Container_IP}:{Container_Port} 
+- {SVC_IP}:{SVC_Port} 
+- {NODE_IP}:{NODE_Port} 
+As one can deploy ingress controller, 
