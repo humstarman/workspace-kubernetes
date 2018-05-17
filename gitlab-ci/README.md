@@ -83,3 +83,30 @@ For registration, we need to obtain GitLab’s own token.
 To get it, login into GitLab as `root`, and navigate to `admin area`.  
 Then go to `Overview -> Runners` and copy your registration token.
   
+Now we need to configure and register runner.  
+We are going to use `kubectl run` command for this.  
+It will create deployment, run default command with argument `register in interactive mode.
+```bash
+$kubectl run -it runner-registrator --image=gitlab/gitlab-runner:latest --restart=Never -- register
+
+Running in system-mode.                            
+                                                   
+Please enter the gitlab-ci coordinator URL (e.g. https://gitlab.com/):
+http://{Node_IP}:{Node_Port}
+Please enter the gitlab-ci token for this runner:
+{Token_from_Gitlab}
+Please enter the gitlab-ci description for this runner:
+[runner-registrator]: 
+Please enter the gitlab-ci tags for this runner (comma separated):
+
+Whether to run untagged builds [true/false]:
+[false]: 
+Whether to lock the Runner to current project [true/false]:
+[true]: 
+Registering runner... succeeded                     runner=
+Please enter the executor: parallels, ssh, docker+machine, kubernetes, docker, docker-ssh, shell, virtualbox, docker-ssh+machine:
+docker
+Please enter the default Docker image (e.g. ruby:2.1):
+busybox
+Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
+```
