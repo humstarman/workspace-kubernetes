@@ -73,4 +73,13 @@ GitLab Runner supports several executors:
 - parallels
 - shell
 - ssh  
+
 Here, we use docker as the executor. 
+To deploy a runner, two steps are needed.
+1. Register the runner in Gitlab
+2. Configure the configmap file in `gitlab-runner`, and deploy the runner.  
+
+For registration, we need to obtain GitLab’s own token.  
+To get it, login into GitLab as `root`, and navigate to `admin area`.  
+Then go to `Overview -> Runners` and copy your registration token.
+  
