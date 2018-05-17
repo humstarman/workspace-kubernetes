@@ -114,9 +114,9 @@ Runner registered successfully. Feel free to start it, but if it's running alrea
 After answering all questions, you should find your runner in the list of runners in the `admin area`.  
 Click on it and copy generated token and paste it into the `gitlab-runner/docker-configmap.yml`.  
 Make sure the status of the runner are  
-Active [x] Paused Runners don't accept new jobs
-Run untagged jobs [x] Indicates whether this runner can pick jobs without tags  
-Lock to current projects [ ] When a runner is locked, it cannot be assigned to other projects 
+Active - [x] Paused Runners don't accept new jobs
+Run untagged jobs - [x] Indicates whether this runner can pick jobs without tags  
+Lock to current projects - [ ] When a runner is locked, it cannot be assigned to other projects 
 
 The last step is to actually deploy GitLab Runner itself.
 ```bash
