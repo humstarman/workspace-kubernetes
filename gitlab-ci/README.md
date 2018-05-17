@@ -23,8 +23,10 @@ kubectl create -f gitlab-core/redis.yaml
 ```
 
 Before deploying Gitlab, some extra works are requiered.  
-On Kubernetes, Gitlab can server in forms of 
+On Kubernetes, Gitlab can serve in forms of 
 - {Container_IP}:{Container_Port} 
 - {SVC_IP}:{SVC_Port} 
-- {NODE_IP}:{NODE_Port} 
-As one can deploy ingress controller, 
+- {NODE_IP}:{NODE_Port}  
+ 
+As one can deploy ingress controller ahead of Gitlab,  
+Gitlab also can use ingress rules to serve.
