@@ -110,3 +110,12 @@ Please enter the default Docker image (e.g. ruby:2.1):
 busybox
 Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
 ```
+
+After answering all questions, you should find your runner in the list of runners in the `admin area`.  
+Click on it and copy generated token and paste it into the `gitlab-runner/docker-configmap.yml`.  
+
+The last step is to actually deploy GitLab Runner itself.
+```bash
+kubectl create -f gitlab-runner/docker-configmap.yaml
+kubectl create -f gitlab-runner/docker-controller.yaml
+```
