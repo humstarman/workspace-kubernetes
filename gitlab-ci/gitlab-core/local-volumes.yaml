@@ -1,0 +1,48 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  namespace: gitlab
+  name: local-volume-1
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /data2/pv-1
+  persistentVolumeReclaimPolicy: Recycle
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  namespace: gitlab
+  name: local-volume-2
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /data2/pv-2
+  persistentVolumeReclaimPolicy: Recycle
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  namespace: gitlab
+  name: local-volume-3
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /data2/pv-3
+  persistentVolumeReclaimPolicy: Recycle

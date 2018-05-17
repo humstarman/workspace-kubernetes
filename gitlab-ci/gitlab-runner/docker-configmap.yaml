@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gitlab-runner
+  namespace: gitlab
+data:
+  config.toml: |
+    concurrent = 4
+
+    [[runners]]
+      name = "Docker Runner"
+      url = "http://gitlab:80/ci"
+      token = "0e5940436dc9eead3a9ab71dfb24c3"
+      executor = "docker"
+      [runners.docker]
+        #namespace = "gitlab"
+        tls_verify = false
+        image = "busybox"
+        privileged = true
