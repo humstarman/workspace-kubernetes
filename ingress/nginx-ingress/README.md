@@ -9,7 +9,7 @@ kubectl create -f rbac.yaml
 
 ## Deploying default http backend
 ```bash
-kubectl create -f default-http-backend.yaml
+kubectl create -f default-backend.yaml
 ```
 
 ## Deploying config maps 

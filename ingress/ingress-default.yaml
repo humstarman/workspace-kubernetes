@@ -23,3 +23,10 @@ spec:
         backend:
           serviceName: nginx-ds 
           servicePort: 80 
+  - host: my.harbor.me
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: harbor 
+          servicePort: 80
