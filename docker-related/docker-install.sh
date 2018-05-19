@@ -72,6 +72,6 @@ EOF
 
 systemctl daemon-reload
 systemctl enable docker
-systemctl start docker
+systemctl restart docker
 
 systemctl enable docker-iptables.service
