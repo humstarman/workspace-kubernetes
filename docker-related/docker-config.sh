@@ -55,9 +55,9 @@ EOF
 cat > /etc/docker/daemon.json << EOF
 {
   "data-root": "/opt/docker",
-  "registry-mirror" : [
-    "https://docker.mirrors.ustc.edu.cn",
-    "hub-mirror.c.163.com"
+  "registry-mirrors" : [
+    "https://nmp34hlf.mirror.aliyuncs.com",
+    "https://mirror.ccs.tencentyun.com"
   ],
   "insecure-registries" : [
     "192.168.0.0/16",

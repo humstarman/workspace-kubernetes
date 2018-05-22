@@ -1957,7 +1957,7 @@ _docker_daemon() {
 		--mtu
 		--oom-score-adjust
 		--pidfile -p
-		--registry-mirror
+		--registry-mirrors
 		--seccomp-profile
 		--shutdown-timeout
 		--storage-driver -s
