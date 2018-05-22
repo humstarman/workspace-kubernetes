@@ -24,7 +24,7 @@ cd env
 ```
 	modify info in .env files, then
 ```sh
-./run-me-only.sh
+./atuo-deploy.sh
 ```
 ---
 2.install kubectl
