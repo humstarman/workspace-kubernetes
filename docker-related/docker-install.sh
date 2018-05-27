@@ -1,5 +1,8 @@
 #!/bin/bash
 
+DOCKER=/opt/docker
+[ -d "$DOCKER" ] || mkdir -p $DOCKER
+
 if [ -x "$(command -v yum)" ]; then
   yum makecache
   yum install -y yum-utils \
@@ -54,7 +57,7 @@ WantedBy=multi-user.target
 EOF
 cat > /etc/docker/daemon.json << EOF
 {
-  "data-root": "/opt/docker",
+  "data-root": "$DOCKER",
   "registry-mirrors" : [
     "https://nmp34hlf.mirror.aliyuncs.com",
     "https://mirror.ccs.tencentyun.com"
