@@ -18,7 +18,7 @@ ansible all -m copy -a "src=./tmp/token.csv dest=/etc/kubernetes"
 
 
 ansible master -m script -a "./put-this-ip.sh $NET_ID"
-#ansible node -m script -a "./put-node-ip.sh $NET_ID"
+ansible node -m script -a "./put-node-ip.sh $NET_ID"
 
 NAME=etcd
 
@@ -52,10 +52,12 @@ for i in $(seq -s ' ' 1 $N); do
   [ -e $FILE ] || touch $FILE
   NODE_NAME="${NAME}-${i}"
   IP=$(echo $IPS | awk -v j=$i -F ' ' '{print $j}')
-  echo "export NODE_NAME=$NODE_NAME" > $FILE
-  echo -e "export NODE_IPS=\"$NODE_IPS\"" >> $FILE
-  echo "export ETCD_NODES=$ETCD_NODES" >> $FILE
-  echo "export ETCD_ENDPOINTS=$ETCD_ENDPOINTS" >> $FILE
+  cat > $FILE << EOF 
+export NODE_NAME=$NODE_NAME
+export NODE_IPS=\"$NODE_IPS\"
+export ETCD_NODES=$ETCD_NODES
+export ETCD_ENDPOINTS=$ETCD_ENDPOINTS
+EOF
   ansible $IP -m copy -a "src=$FILE dest=/var/env/etcd.env"
 done
 rm -rf ./tmp

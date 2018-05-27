@@ -23,11 +23,13 @@ PORT=6443
 [ -f /var/env/this-ip.env ] || touch /var/env/this-ip.env
 THIS_IP=$(echo "$THIS_IP" | grep -E "^[0-9]*.[0-9]*.[0-9]*.[0-9]*$")
 if [ -n "$THIS_IP" ]; then
-  echo "export NET_ID=$NET_ID" > /var/env/this-ip.env
-  echo "export THIS_IP=$THIS_IP" >> /var/env/this-ip.env
-  echo "export NODE_IP=$THIS_IP" >> /var/env/this-ip.env
-  echo "export MASTER_IP=$MASTER_IP" >> /var/env/this-ip.env
-  echo "export KUBE_APISERVER=https://${MASTER_IP}:${PORT}" >> /var/env/this-ip.env
+  cat > /var/env/this-ip.env << EOF
+export NET_ID=$NET_ID
+export THIS_IP=$THIS_IP
+export NODE_IP=$THIS_IP
+export MASTER_IP=$MASTER_IP
+export KUBE_APISERVER=https://${MASTER_IP}:${PORT}
+EOF
 else
   echo -e "# check the value of net id" | tee /var/env/this-ip.env
 fi
