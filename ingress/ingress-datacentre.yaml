@@ -5,10 +5,10 @@ metadata:
   namespace: datacentre
 spec:
   rules:
-  - host: my.k8s.ingress
+  - host: my.block.me
     http:
       paths:
-      - path: /blockchain
+      - path: /
         backend:
           serviceName: block-chain-proxy 
           servicePort: 8080

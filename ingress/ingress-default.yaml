@@ -1,32 +1,16 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: my-k8s-ingress
+  name: https-ingress
+  annotations: 
+    ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/secure-backends: "true"
 spec:
   rules:
-  - host: my.k8s.me
-    http:
-      paths:
-      - path: /file
-        backend:
-          serviceName: file-server
-          servicePort: 80 
-      - path: /prom
-        backend:
-          serviceName: prom-all-in-one 
-          servicePort: 9090 
-      - path: /grafana
-        backend:
-          serviceName: prom-all-in-one 
-          servicePort: 3000 
-      - path: /hi
-        backend:
-          serviceName: nginx-ds 
-          servicePort: 80 
   - host: my.harbor.me
     http:
       paths:
       - path: /
         backend:
           serviceName: harbor 
-          servicePort: 80
+          servicePort: 443
