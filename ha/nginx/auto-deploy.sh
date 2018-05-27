@@ -7,6 +7,10 @@ if [ ! -x "$(command -v docker)" ]; then
   exit 1
 fi
 
+MASTER_1=192.168.100.161
+MASTER_2=192.168.100.162
+MASTER_3=192.168.100.163
+
 DOCKER=$(which docker)
 NGINX_CONF_DIR=/etc/nginx
 [ -d "$NGINX_CONF_DIR" ] || mkdir -p "$NGINX_CONF_DIR"
@@ -26,9 +30,9 @@ events {
 stream {
     upstream kube_apiserver {
         least_conn;
-        server 192.168.0.151:6443;
-        server 192.168.0.152:6443;
-        server 192.168.0.153:6443;
+        server $MASTER_1:6443;
+        server $MASTER_2:6443;
+        server $MASTER_3:6443;
     }
 
     server {
@@ -66,8 +70,6 @@ TimeoutStartSec=30s
 WantedBy=multi-user.target
 EOF
 
-if false; then
-  systemctl daemon-reload
-  system enable nginx-proxy.service
-  system restart nginx-proxy.service
-fi
+systemctl daemon-reload
+system enable nginx-proxy.service
+system restart nginx-proxy.service
