@@ -25,10 +25,10 @@ THIS_IP=$(echo "$THIS_IP" | grep -E "^[0-9]*.[0-9]*.[0-9]*.[0-9]*$")
 if [ -n "$THIS_IP" ]; then
   cat > /var/env/this-ip.env << EOF
 export NET_ID=$NET_ID
-export THIS_IP=$THIS_IP"
-export NODE_IP=$THIS_IP"
-export MASTER_IP=$MASTER_IP"
-export KUBE_APISERVER=https://${MASTER_IP}:${PORT}"
+export THIS_IP=$THIS_IP
+export NODE_IP=$THIS_IP
+export MASTER_IP=$MASTER_IP
+export KUBE_APISERVER=https://${MASTER_IP}:${PORT}
 EOF
 else
   echo -e "# check the value of net id" | tee /var/env/this-ip.env
