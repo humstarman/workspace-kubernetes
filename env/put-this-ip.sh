@@ -1,11 +1,6 @@
 #!/bin/bash
 
-NET_ID=$1
-if [ -z "$NET_ID" ]
-then
-  NET_ID="172.31."
-fi
-
+NET_ID=${1:-"172.31"}
 THIS_IP=$NET_ID
 
 #IPS=$(hostname --all-ip-address)
