@@ -48,6 +48,10 @@ to check
 <pre><code>$ gluster volume create k8s-volume transport tcp node-1:/opt/gfs_data node-2:/opt/gfs_data node-3:/opt/gfs_data force</code></pre>
 		for the type of Replicate:3, run:
 <pre><code>$ gluster volume create k8s-volume replica 3 transport tcp node-1:/opt/gfs_data node-2:/opt/gfs_data node-3:/opt/gfs_data force</code></pre>
+for type of disperse replica:  
+```bash
+gluster volume create k8s-volume disperse 5 node-151:/opt/gfs_data node-152:/opt/gfs_data node-153:/opt/gfs_data node-154:/opt/gfs_data node-161:/opt/gfs_data node-162:/opt/gfs_data node-163:/opt/gfs_data node-164:/opt/gfs_data node-165:/opt/gfs_data node-166:/opt/gfs_data force
+```
 3.2 check
 ---
 		using:
