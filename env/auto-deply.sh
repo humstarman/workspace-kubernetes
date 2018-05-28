@@ -1,7 +1,7 @@
 #!/bin/bash
 
-MASTER="172.31.78.215 172.31.78.216 172.31.78.217"
-NET_ID="172.31.78"
+MASTER="192.168.100.161 192.168.100.162 192.168.100.163"
+NET_ID="192.168.100"
 
 mkdir -p ./tmp
 BOOTSTRAP_TOKEN=$(head -c 16 /dev/urandom | od -An -t x | tr -d ' ')
@@ -54,7 +54,7 @@ for i in $(seq -s ' ' 1 $N); do
   IP=$(echo $IPS | awk -v j=$i -F ' ' '{print $j}')
   cat > $FILE << EOF 
 export NODE_NAME=$NODE_NAME
-export NODE_IPS=\"$NODE_IPS\"
+export NODE_IPS="$NODE_IPS"
 export ETCD_NODES=$ETCD_NODES
 export ETCD_ENDPOINTS=$ETCD_ENDPOINTS
 EOF

@@ -13,7 +13,7 @@ if [ ! -x "$(command -v ansible)" ]; then
   exit 1
 fi
 
-LOCAL_REPO="172.31.78.217:5000"
+LOCAL_REPO="192.168.100.154:5000"
 DOCKER_HUB="lowyard"
 
 IMAGES="$*"

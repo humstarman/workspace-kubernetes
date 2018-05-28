@@ -34,8 +34,8 @@ else
   exit 1
 fi
 
-systemctl stop $FIREWALL
-systemctl disable $FIREWALL
+#ystemctl stop $FIREWALL
+#ystemctl disable $FIREWALL
 
 iptables -P FORWARD ACCEPT
 iptables -F && iptables -X && iptables -F -t nat && iptables -X -t nat

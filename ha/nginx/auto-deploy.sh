@@ -71,5 +71,5 @@ WantedBy=multi-user.target
 EOF
 
 systemctl daemon-reload
-system enable nginx-proxy.service
-system restart nginx-proxy.service
+systemctl enable nginx-proxy.service
+systemctl restart nginx-proxy.service

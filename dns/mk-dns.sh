@@ -17,8 +17,8 @@ if [ -z "$(kubectl -n kube-system get po | grep dns | grep Running)" ]; then
 fi
 
 DNS="/etc/resolv.conf"
-ORIGINAL_DNS1="100.100.2.136"
-ORIGINAL_DNS2="100.100.2.138"
+ORIGINAL_DNS1="192.168.100.1"
+ORIGINAL_DNS2="8.8.8.8"
 
 cat > $DNS << EOF
 nameserver 127.0.0.1
