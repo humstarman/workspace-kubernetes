@@ -1,17 +1,12 @@
 #!/bin/bash
 
-DistributorID=$(lsb_release -i | awk -F ' ' '{print $3}' | tail -n 1)
-
-echo $DistributorID
-
-if [ "CentOS" == "$DistributorID" ]; then
+if [ -x "$(command -v yum)" ]; then
   FIREWALL="firewalld"
-elif [ "Ubuntu" == "$DistributorID" ]; then
+elif [ -x "$(command -v apt-get)" ]; then
   FIREWALL="ufw"
 else
   echo "$(date) - $0 - [ERROR] - unknown Distributor ID."
   exit 1
 fi
-
 systemctl stop $FIREWALL
 systemctl disable $FIREWALL
