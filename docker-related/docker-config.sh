@@ -1,15 +1,16 @@
 #!/bin/bash
 
 DOCKER=/opt/docker
+[ -d "$DOCKER" ] || mkdir -p $DOCKER
 
 if [ -x "$(command -v yum)" ]; then
   yum makecache
   yum install -y yum-utils \
     device-mapper-persistent-data \
     lvm2
-  yum-config-manager \
-    --add-repo \
-    https://download.docker.com/linux/centos/docker-ce.repo
+  #yum-config-manager \
+   # --add-repo \
+    #https://download.docker.com/linux/centos/docker-ce.repo
   #yum install -y docker-ce
   yum install -y conntrack
   FIREWALL="firewalld"
@@ -34,8 +35,8 @@ else
   exit 1
 fi
 
-#ystemctl stop $FIREWALL
-#ystemctl disable $FIREWALL
+systemctl stop $FIREWALL
+systemctl disable $FIREWALL
 
 iptables -P FORWARD ACCEPT
 iptables -F && iptables -X && iptables -F -t nat && iptables -X -t nat
@@ -54,6 +55,7 @@ ExecStart=/bin/sh \\
 [Install]
 WantedBy=multi-user.target
 EOF
+[ -d /etc/docker ] || mkdir -p /etc/docker
 cat > /etc/docker/daemon.json << EOF
 {
   "data-root": "$DOCKER",
