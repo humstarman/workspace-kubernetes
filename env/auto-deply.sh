@@ -2,6 +2,7 @@
 
 MASTER="192.168.100.161 192.168.100.162 192.168.100.163"
 NET_ID="192.168.100"
+NODE_EXISTENCE=false
 
 mkdir -p ./tmp
 BOOTSTRAP_TOKEN=$(head -c 16 /dev/urandom | od -An -t x | tr -d ' ')
@@ -18,7 +19,9 @@ ansible all -m copy -a "src=./tmp/token.csv dest=/etc/kubernetes"
 
 
 ansible master -m script -a "./put-this-ip.sh $NET_ID"
-ansible node -m script -a "./put-node-ip.sh $NET_ID"
+if $NODE_EXISTENCE; then
+  ansible node -m script -a "./put-node-ip.sh $NET_ID"
+fi
 
 NAME=etcd
 
@@ -52,7 +55,7 @@ for i in $(seq -s ' ' 1 $N); do
   [ -e $FILE ] || touch $FILE
   NODE_NAME="${NAME}-${i}"
   IP=$(echo $IPS | awk -v j=$i -F ' ' '{print $j}')
-  cat > $FILE << EOF 
+  cat > $FILE << EOF
 export NODE_NAME=$NODE_NAME
 export NODE_IPS="$NODE_IPS"
 export ETCD_NODES=$ETCD_NODES
@@ -60,6 +63,16 @@ export ETCD_ENDPOINTS=$ETCD_ENDPOINTS
 EOF
   ansible $IP -m copy -a "src=$FILE dest=/var/env/etcd.env"
 done
+if $NODE_EXISTENCE; then
+  FILE="./tmp/etcd.env"
+  [ -e $FILE ] && rm -f $FILE
+  [ -e $FILE ] || touch $FILE
+  cat > $FILE << EOF
+export ETCD_NODES=$ETCD_NODES
+export ETCD_ENDPOINTS=$ETCD_ENDPOINTS
+EOF
+  ansible node -m copy -a "src=$FILE dest=/var/env/etcd.env"
+fi
 rm -rf ./tmp
 
 ansible all -m script -a ./mk-env-conf.sh
