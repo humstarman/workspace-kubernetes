@@ -1,5 +1,4 @@
-0 Prerequisites
-===
+##0 Prerequisites
 	the version of kubeflow is v0.1.2
 	Before installing kubeflow, following are needed:
 * ansible
@@ -16,33 +15,29 @@ and, the installation of ksonnet can be implemeted as:
 </div>
 
 ---
-1 Generate my-kubeflow directory
-===
+##1 Generate my-kubeflow directory
 	run:
 ```console
 ./init.sh
 ```
 
 ---
-2 Prepare images
-===
+##2 Prepare images
 	for some reasons, one can not get images directly.
 
 ---
-3 Pull the images and rename
-===
+##3 Pull the images and rename
 	run:
 ```console
 ./pull-and-tag.sh
 ```
 
 ---
-4 deploy tensorflow on kubernetes
-===
+##4 deploy tensorflow on kubernetes
 1. cd to my-kubeflow directory
 2. run:
 ```console
-./cp-to-kubeflow-then-run.sh
+./run.sh
 ```
 
 ---
