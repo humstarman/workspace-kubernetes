@@ -48,14 +48,15 @@ function pull_distribute_tag() {
     echo "$(date) - [INFO] - image $PULLABLE pulled."
   fi
   docker tag $PULLABLE ${LOCAL_REPO}/$NAME
+  docker tag ${LOCAL_REPO}/$NAME $IMAGE
   echo "$(date) - [INFO] - rename $PULLABLE as ${LOCAL_REPO}/$NAME."
   docker push ${LOCAL_REPO}/$NAME
   echo "$(date) - [INFO] - image ${LOCAL_REPO}/$NAME pushed."
-  ansible all -m shell -a "docker pull ${LOCAL_REPO}/$NAME"
+  ansible other -m shell -a "docker pull ${LOCAL_REPO}/$NAME"
   echo "$(date) - [INFO] - image ${LOCAL_REPO}/$NAME pulled at all nodes."
-  ansible all -m shell -a "docker tag ${LOCAL_REPO}/$NAME $IMAGE"
+  ansible other -m shell -a "docker tag ${LOCAL_REPO}/$NAME $IMAGE"
   echo "$(date) - [INFO] - rename image ${LOCAL_REPO}/$NAME as ${IMAGE} at all nodes."
-  ansible all -m shell -a "docker rmi ${LOCAL_REPO}/$NAME"
+  ansible other -m shell -a "docker rmi ${LOCAL_REPO}/$NAME"
   echo "$(date) - [INFO] - delete temporary image ${LOCAL_REPO}/$NAME at all nodes."
 }
 
