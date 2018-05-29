@@ -29,6 +29,6 @@ else
 fi
 
 if [ -z "$(cat /etc/profile | grep 'source <(helm completion bash)')" ]; then
-  echo 'source <(kubectl completion bash)' >> /etc/profile
+  echo 'source <(helm completion bash)' >> /etc/profile
 fi
 
