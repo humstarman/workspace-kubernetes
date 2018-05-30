@@ -39,7 +39,14 @@ spec:
           volumeMounts:
             - name: redis
               mountPath: /data
+              subPath: redis
+            - name: host-time
+              mountPath: /etc/localtime
+              readOnly: true
       volumes:
         - name: redis
           persistentVolumeClaim:
-            claimName: gitlab-pvc 
+            claimName: glusterfs-pvc 
+        - name: host-time
+          hostPath:
+            path: /etc/localtime

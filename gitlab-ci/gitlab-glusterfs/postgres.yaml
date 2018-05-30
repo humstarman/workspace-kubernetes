@@ -45,7 +45,14 @@ spec:
           volumeMounts:
             - name: postgresql
               mountPath: /var/lib/postgresql/data
+              subPath: postgres
+            - name: host-time
+              mountPath: /etc/localtime
+              readOnly: true
       volumes:
         - name: postgresql
           persistentVolumeClaim:
-            claimName: gitlab-pvc 
+            claimName: glusterfs-pvc 
+        - name: host-time
+          hostPath:
+            path: /etc/localtime

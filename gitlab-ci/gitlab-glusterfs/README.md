@@ -1,53 +1,132 @@
-# 将 GitLab 部署到 Kubernetes 集群上
+# Deploying Gitlab on Kubernetes
 
-本项目展示，如何将一个常见的多组件工作负载（在本例中是 GitLab）部署到 Kubernetes 集群上。GitLab 因其基于 Git 的代码跟踪工具而流行。GitLab 代表着一种典型的多层应用程序，每个组件都拥有自己的容器。微服务容器将用于 Web 层，状态/作业数据库使用 Redis 和 PostgreSQL 作为数据库。  
+Manifests to deploy GitLab on Kubernetes  
 
+## 0 Prerequisites:
 
-1.用户通过 Web 接口或通过将代码推送到 GitHub 存储库来与 GitLab 交互。GitLab 容器运行 NGINX 和 gitlab-workhorse 背后的主要 Ruby on Rails 应用程序，gitlab-workhorse 是一个针对大型 HTTP 请求的逆向代理，比如文件下载和 Git 推送/拉取请求。在通过 HTTP/HTTPS 提供存储库时，GitLab 利用 GitLab API 来解决授权和访问，并提供 Git 对象。
+1. All configurations are assuming deployment to namespace `gitlab`
+2. Domain names used in this project are node ip and port.
+3. Pods are configured with Gluster persistent storage.   
 
-2.经过身份验证和授权后，GitLab Rails 应用程序将传入的作业、作业信息和元数据放在 Redis 作业队列上，该作业队列充当着一个非持久数据库。
+## 1 Deploying Gitlab
 
-3.存储库创建于本地文件系统中。
-
-4.用户创建用户、角色、合并请求、组等信息 - 所有这些信息然后存储在 PostgreSQL 中。
-
-5.用户运行 Git shell 来访问存储库。
-
-## 目标
-这个场景提供以下任务的操作说明和经验：
-
-- 构建容器并将它们存储在容器注册表中
-- 使用 Kubernetes 创建本地持久卷来定义持久磁盘
-- 使用 Kubernetes pod 和服务部署容器
-- 将一个分布式 GitLab 部署到 Kubernetes 上
-
-#### 步骤
-
-[使用 Kubernetes 创建服务和部署](#1-use-kubernetes-to-create-services-and-deployments-for-gitlab-redis-and-postgresql)
-
-#### 使用 Kubernetes 为 GitLab、Redis 和 PostgreSQL 创建服务并执行部署
-
-运行 `kubectl` 命令确保您的 Kubernetes 集群可供访问。  
-
+First, create a separate namespace for Gitlab
 ```bash
-$ kubectl get nodes
-NAME             STATUS    AGE       VERSION
-x.x.x.x          Ready     17h       v1.5.3-2+be7137fd3ad68f
+kubectl create -f gitlab-glusterfs/manifest/namespace.yaml
 ```
 
-> 备注：如果这一步失败，请参阅 [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) 或 [IBM Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_troubleshoot.html#cs_troubleshoot) 上的故障排除文档。
-
-##### 在容器中使用 PostgreSQL
-
-如果使用容器映像来运行 PostgreSQL，可对您的 Kubernetes 集群运行以下命令。
-
+Deploy Gluster persistent storage
 ```bash
-$ kubectl create -f local-volumes.yaml
-$ kubectl create -f postgres.yaml
-$ kubectl create -f redis.yaml
-$ kubectl create -f gitlab.yaml
+kubectl create -f gitlab-glusterfs/manifest/glusterfs-pv.yaml 
+kubectl create -f gitlab-glusterfs/manifest/glusterfs-pvc.yaml 
+kubectl create -f gitlab-glusterfs/manifest/glusterfs-endpoints.yaml 
+kubectl create -f gitlab-glusterfs/manifest/glusterfs-service.yaml 
 ```
 
-创建所有这些服务和部署后，等待 3 到 5 分钟。可以在 Kubernetes UI 上检查部署状态。运行 kubectl proxy 并访问 URL 'http://127.0.0.1:8001/ui  '，以检查 GitLab 容器何时准备就绪。
+Deploy PostgreSQL and Redis
+```bash
+kubectl create -f gitlab-glusterfs/postgres.yaml
+kubectl create -f gitlab-glusterfs/redis.yaml
+```
 
-> 备注：对于`local-volumes`，切勿提前手动创建文件夹。
+Before deploying Gitlab, some extra works are requiered.  
+On Kubernetes, Gitlab can serve in forms of 
+- {Container_IP}:{Container_Port} 
+- {SVC_IP}:{SVC_Port} 
+- {NODE_IP}:{NODE_Port}  
+ 
+As one can deploy ingress controller ahead of Gitlab,  
+Gitlab also can use ingress rules to serve.  
+By defalut, the `external_url` field of Gitlab is set as a site url.  
+Therefore, DNS is critical. Normally, we write the `/etc/hosts`.  
+But, in practice, if intergrating with CI implemented by Gitlab-runner,  
+a Gitlab-runner may run a docker container to work.  
+In this above circumstance, the runned docker container cannot resolve the `external_url` of Gitlab.  
+The solution we used is to set the `external_url` in the form of  `http://{Node_IP}:{Node_Port}`.  
+
+On Kubernetes. Gitlab-core service is schedlued by `kube-schedluer`; so in a cluster,  
+it is hard to tell the node where the pod of Gitlab resides.  
+To achieve this, we label the node, and introduce `NodeSelector` filed to `gitlab-glusterfs/gitlab.yaml`.  
+
+Label the node to carry Gitlab  
+```bash
+kubectl label node {Node_Name} gitlab=true
+```
+
+Also, you can label other nodes as (nonessential)
+```bash
+kubectl label node {Other_Node_Name} gitlab=false
+```
+
+Accordingly, modify  `gitlab-glusterfs/gitlab.yaml` in two segment  
+1. set the value `GITLAB_OMNIBUS_CONFIG` in `.spec.template.spec.containers[0].env` as `http://{Node_IP}:{Node_Port}`
+2. in `.spec.template.spec` add `nodeSelector` filed with value `gitlab: "true"`  
+
+Then, deploy Gitlab
+```bash
+kubectl create -f gitlab-glusterfs/gitlab.yaml
+```
+
+## 2 Deploying Gitlab-runner
+
+To implement CIi, a exector is needed.  
+In this project, we use Gitlab-runner.  
+GitLab Runner supports several executors: 
+- virtualbox
+- docker+machine
+- docker-ssh+machine
+- docker
+- docker-ssh
+- parallels
+- shell
+- ssh  
+
+Here, we use docker as the executor. 
+To deploy a runner, two steps are needed.
+1. Register the runner in Gitlab
+2. Configure the configmap file in `gitlab-runner`, and deploy the runner.  
+
+For registration, we need to obtain GitLab’s own token.  
+To get it, login into GitLab as `root`, and navigate to `admin area`.  
+Then go to `Overview -> Runners` and copy your registration token.
+  
+Now we need to configure and register runner.  
+We are going to use `kubectl run` command for this.  
+It will create deployment, run default command with argument `register in interactive mode.
+```bash
+$kubectl run -it runner-registrator --image=gitlab/gitlab-runner:latest --restart=Never -- register
+
+Running in system-mode.                            
+                                                   
+Please enter the gitlab-ci coordinator URL (e.g. https://gitlab.com/):
+http://{Node_IP}:{Node_Port}
+Please enter the gitlab-ci token for this runner:
+{Token_from_Gitlab}
+Please enter the gitlab-ci description for this runner:
+[runner-registrator]: 
+Please enter the gitlab-ci tags for this runner (comma separated):
+
+Whether to run untagged builds [true/false]:
+[false]: 
+Whether to lock the Runner to current project [true/false]:
+[true]: 
+Registering runner... succeeded                     runner=
+Please enter the executor: parallels, ssh, docker+machine, kubernetes, docker, docker-ssh, shell, virtualbox, docker-ssh+machine:
+docker
+Please enter the default Docker image (e.g. ruby:2.1):
+busybox
+Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
+```
+
+After answering all questions, you should find your runner in the list of runners in the `admin area`.  
+Click on it and copy generated token and paste it into the `gitlab-runner/docker-configmap.yml`.  
+Make sure the status of the runner are  
+- [x] Active: Runners don't accept new jobs
+- [x] Run untagged jobs: Indicates whether this runner can pick jobs without tags  
+- [ ] Lock to current projects: When a runner is locked, it cannot be assigned to other projects 
+
+The last step is to actually deploy GitLab Runner itself.
+```bash
+kubectl create -f gitlab-runner/docker-configmap.yaml
+kubectl create -f gitlab-runner/docker-controller.yaml
+```
