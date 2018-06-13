@@ -10,5 +10,19 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: block-chain-proxy 
+          serviceName: demo-proxy 
+          servicePort: 8080
+  - host: my.demo1.me
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: demo1-proxy 
+          servicePort: 8080
+  - host: my.demo3.me
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: demo3-proxy 
           servicePort: 8080

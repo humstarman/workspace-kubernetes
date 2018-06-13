@@ -4,7 +4,10 @@ GlusterVer=3.12
 VOL_FOR_GLUSTER="opt"
 
 # mk switch-on-kernel-modules.sh
-cat > /usr/local/bin/switch-on-kernel-modules.sh << EOF
+NAME=mod-for-glusterfs
+BIN=${NAME}.sh
+SVC=${NAME}.service
+cat > /usr/local/bin/${BIN} << EOF
 #!/bin/bash
 MODULES="dm_snapshot dm_mirror dm_thin_pool"
 for MODULE in \$MODULES; do
@@ -14,24 +17,24 @@ for MODULE in \$MODULES; do
   lsmod | grep \$MODULE
 done
 iptables -I INPUT -p tcp --dport 24007 -j ACCEPT
+sleep 10
+PID=\$(ps aux | grep -v grep | grep /usr/sbin/glusterd | awk -F ' ' '{print \$2}')
+kill -9 \$PID
+systemctl restart glusterd
 EOF
-chmod +x /usr/local/bin/switch-on-kernel-modules.sh
+chmod +x /usr/local/bin/${BIN}
 # mk mod-for-glusterfs.service 
-cat > /etc/systemd/system/mod-for-glusterfs.service << EOF
+cat > /etc/systemd/system/${SVC} << EOF
 [Unit]
 Description=Switch-on Kernel Modules Needed by Glusterfs
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/switch-on-kernel-modules.sh
+ExecStart=/usr/local/bin/${BIN}
 
 [Install]
 WantedBy=multi-user.target
 EOF
-
-systemctl daemon-reload
-systemctl enable mod-for-glusterfs.service
-systemctl restart mod-for-glusterfs.service
 
 # install glusterfs
 if [ -x "$(command -v yum)" ]; then
@@ -74,3 +77,7 @@ if [[ ! "$(cat /etc/hosts | grep 'node-' | wc | awk -F ' ' '{print $1}')" > 1 ]]
 192.168.100.166 node-166
 EOF
 fi
+
+systemctl daemon-reload
+systemctl enable ${SVC} 
+systemctl restart ${SVC} 
