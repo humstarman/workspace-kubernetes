@@ -12,3 +12,10 @@ spec:
         backend:
           serviceName: monitoring-grafana
           servicePort: 80
+  - host: my.ki.me
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kibana-logging 
+          servicePort: 5601 
