@@ -92,6 +92,9 @@ spec:
         - name: varlibdockercontainers
           mountPath: /var/lib/docker/containers
           readOnly: true
+        - name: optdockercontainers
+          mountPath: /opt/docker/containers
+          readOnly: true
         - name: config-volume
           mountPath: /etc/fluent/config.d
       nodeSelector:
@@ -104,6 +107,9 @@ spec:
       - name: varlibdockercontainers
         hostPath:
           path: /var/lib/docker/containers
+      - name: optdockercontainers
+        hostPath:
+          path: /opt/docker/containers
       - name: config-volume
         configMap:
           name: fluentd-es-config-v0.1.4
