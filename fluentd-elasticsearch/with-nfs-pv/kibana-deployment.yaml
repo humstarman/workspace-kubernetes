@@ -39,3 +39,11 @@ spec:
         - containerPort: 5601
           name: ui
           protocol: TCP
+        volumeMounts:  
+          - name: host-time
+            mountPath: /etc/localtime
+            readOnly: true
+      volumes:
+        - name: host-time
+          hostPath:
+            path: /etc/localtime

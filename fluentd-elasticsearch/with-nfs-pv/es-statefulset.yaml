@@ -16,7 +16,7 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 10Gi
+      storage: 100Gi
 ---
 # RBAC authn and authz
 apiVersion: v1
@@ -93,7 +93,7 @@ spec:
     spec:
       serviceAccountName: elasticsearch-logging
       containers:
-      - image: lowyard/elasticsearch:v5.6.4
+      - image: 192.168.100.166:5000/elasticsearch:v5.6.4 
         name: elasticsearch-logging
         resources:
           # need more cpu upon initialization, therefore burstable class
@@ -111,6 +111,9 @@ spec:
         volumeMounts:
         - name: elasticsearch-logging
           mountPath: /data
+        - name: host-time
+          mountPath: /etc/localtime
+          readOnly: true
         env:
         - name: "NAMESPACE"
           valueFrom:
@@ -120,6 +123,9 @@ spec:
       - name: elasticsearch-logging
         persistentVolumeClaim:
           claimName: elasticsearch-pvc
+      - name: host-time
+        hostPath:
+          path: /etc/localtime
       # Elasticsearch requires vm.max_map_count to be at least 262144.
       # If your OS already sets up this number to a higher value, feel free
       # to remove this init container.

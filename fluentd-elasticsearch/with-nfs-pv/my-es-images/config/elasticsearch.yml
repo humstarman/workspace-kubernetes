@@ -15,3 +15,7 @@ discovery.zen.minimum_master_nodes: ${MINIMUM_MASTER_NODES}
 
 xpack.security.enabled: false
 xpack.monitoring.enabled: false
+
+index.cache.field.max_size: 50000 
+index.cache.field.expire: 10m 
+index.cache.field.type: soft 
