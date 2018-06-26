@@ -1,18 +1,4 @@
 ---
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: postgres-claim
-  namespace: gitlab
-  annotations:
-    volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 10Gi
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -26,20 +12,6 @@ spec:
   selector:
     app: gitlab
     tier: postgreSQL
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  namespace: gitlab
-  name: postgres-claim
-  labels:
-    app: gitlab
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
