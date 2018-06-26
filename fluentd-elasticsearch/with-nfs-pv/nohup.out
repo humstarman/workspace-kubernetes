@@ -1,0 +1,14 @@
+service "elasticsearch-logging" deleted
+serviceaccount "nfs-client-provisioner" deleted
+persistentvolumeclaim "elasticsearch-pvc" deleted
+serviceaccount "elasticsearch-logging" deleted
+clusterrole.rbac.authorization.k8s.io "elasticsearch-logging" deleted
+clusterrolebinding.rbac.authorization.k8s.io "elasticsearch-logging" deleted
+configmap "fluentd-es-config-v0.1.4" deleted
+serviceaccount "fluentd-es" deleted
+clusterrole.rbac.authorization.k8s.io "fluentd-es" deleted
+clusterrolebinding.rbac.authorization.k8s.io "fluentd-es" deleted
+daemonset.apps "fluentd-es-v2.0.4" deleted
+deployment.apps "kibana-logging" deleted
+service "kibana-logging" deleted
+error: error when stopping "es-statefulset.yaml": timed out waiting for "elasticsearch-logging" to be synced

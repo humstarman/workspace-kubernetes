@@ -1,4 +1,4 @@
-FROM lowyard/elasticsearch:v5.6.4
+FROM lowyard/elasticsearch:v6.2.4
 
 COPY run.sh ./bin/
 
