@@ -37,20 +37,6 @@ spec:
     tier: frontend
   type: NodePort
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  namespace: gitlab
-  name: gitlab-claim
-  labels:
-    app: gitlab
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
----
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -68,7 +54,7 @@ spec:
         tier: frontend
     spec:
       containers:
-        - image: gitlab/gitlab-ce:9.1.0-ce.0
+        - image: gitlab/gitlab-ce:11.0.1-ce.0
           name: gitlab
           env:
             - name: GITLAB_OMNIBUS_CONFIG
@@ -93,8 +79,6 @@ spec:
           volumeMounts:
             - name: gitlab
               mountPath: /home/git/data
-      nodeSelector:
-        gitlab: "true"
       volumes:
         - name: gitlab
           persistentVolumeClaim:
