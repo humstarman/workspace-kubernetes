@@ -33,3 +33,6 @@ ExecStart=/usr/local/bin/${BIN}
 [Install]
 WantedBy=multi-user.target
 EOF
+systemctl daemon-reload
+systemctl enable $SVC
+systemctl restart $SVC
