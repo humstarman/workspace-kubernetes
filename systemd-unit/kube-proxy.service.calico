@@ -14,6 +14,10 @@ ExecStart=/usr/local/bin/kube-proxy \
   --logtostderr=true \
   --proxy-mode=iptables \
   --masquerade-all \
+  --proxy-mode=ipvs \
+  --ipvs-min-sync-period=5s \
+  --ipvs-sync-period=5s \
+  --ipvs-scheduler=rr \
   --v=2
 Restart=on-failure
 RestartSec=5
