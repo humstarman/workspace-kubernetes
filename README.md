@@ -1,4 +1,4 @@
-For Kubernetes v1.10
+For Kubernetes v1.11
 ===
 
 ---
