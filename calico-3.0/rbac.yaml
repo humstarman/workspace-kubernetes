@@ -54,10 +54,11 @@ kind: ClusterRoleBinding
 metadata:
   name: calico-node
 roleRef:
-  apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: calico-node
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
 subjects:
 - kind: ServiceAccount
   name: calico-node
   namespace: kube-system
+
