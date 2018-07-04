@@ -7,7 +7,7 @@ usage: $0 [ -n NETWORK-ID ] [ -p HOSTNAME-PREFIX ]
 USAGE
 exit 0
 }
-[ -z "$@" ] && show_help
+[ -z "$*" ] && show_help
 # Get Opts
 while getopts "hn:p:" opt; do # 选项后面的冒号表示该选项需要参数
     case "$opt" in
@@ -42,7 +42,6 @@ ID=${ID#*${NET_ID}}
 ID=${ID%% *}
 IP=${NET_ID}$ID
 HOSTNAME="${PREFIX}${IP}"
-echo $HOSTNAME
 cat > /etc/hostname << EOF
 $HOSTNAME
 EOF
