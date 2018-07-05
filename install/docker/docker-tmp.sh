@@ -22,8 +22,8 @@ while getopts "hi:p:g:" opt; do # 选项后面的冒号表示该选项需要参�
         ;;
     esac
 done
-[ -z "$INSTALL" ] && INSTALL=false
-[ -z "$DOCKER" ] && DOCKER=/var/lib/docker
+INSTALL=${INSTALL:-"false"}
+DOCKER=${INSTALL:-"/var/lib/docker"}
 [ -d "$DOCKER" ] || mkdir -p $DOCKER
 if [ -x "$(command -v yum)" ]; then
   yum makecache
