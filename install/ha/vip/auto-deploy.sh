@@ -1,17 +1,46 @@
 #!/bin/bash
 
-MASTERS="192.168.100.161 192.168.100.162 192.168.100.163"
-VIP=192.168.100.100
-CHK=chk.sh
+show_help () {
+cat << USAGE
+usage: $0 [ -m MASTER(S) ] [ -v VIRTUAL-IP ] [ -e EXECUTABLE-SCRIPT-TO-CHECK-HAPROXY ]
+    -m : Specify the IP address(es) of Master node(s). If multiple, set the images in term of csv, 
+         as 'master-ip-1,master-ip-2,master-ip-3'.
+    -v : Specify the virtual IP address, 
+    -c : Specify the executable script for checking haproxy component. If not specified, use 'chk.sh' for default.
+USAGE
+exit 0
+}
 
-if [ -z "$MASTERS" ]; then
-  echo "$(date -d today +'%Y-%m-%d %H:%M:%S') - [ERROR] - need masters input!"
+# Get Opts
+while getopts "hm:v:c:" opt; do # 选项后面的冒号表示该选项需要参数
+    case "$opt" in
+    h)  show_help
+        ;;
+    m)  MASTERS=$OPTARG # 参数存在$OPTARG中
+        ;;
+    v)  VIP=$OPTARG
+        ;;
+    c)  CHK=$OPTARG
+        ;;
+    ?)  # 当有不认识的选项的时候arg为?
+        echo "unkonw argument"
+        exit 1
+        ;;
+    esac
+done
+
+chk_var () {
+if [ -z "$2" ]; then
+  echo "$(date -d today +'%Y-%m-%d %H:%M:%S') - [ERROR] - no input for \"$1\", try \"$0 -h\"."
+  sleep 3
   exit 1
 fi
-if [ ! -x "$(command -v ansible)" ]; then
-  echo "$(date -d today +'%Y-%m-%d %H:%M:%S') - [ERROR] - no ansible installed!"
-  exit 1
-fi
+}
+chk_var -m $MASTERS
+chk_var -v $VIP
+
+MASTERS="$(echo $MASTERS | tr ',' ' ')"
+CHK=${CHK:-"chk.sh"}
 
 # install vip
 FILE=/tmp/install-vip.sh
