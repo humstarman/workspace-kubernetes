@@ -2,23 +2,23 @@
 show_help () {
 cat << USAGE
 usage: $0 [ -m MASTER-IP(S) ] [ -n NODE-IP(S) ] [ -a ANSIBLE-HOST-FILE ]
-    -m : Specify the master IP(s), if multiple, set in term of csv. If not specified, find from file './master.csv' for default.
-    -n : Specify the node IP(s), if multiple, set in term of csv. If not specified, find from file './node.csv' for default.
-    -e : Specify the new node IP(s), if multiple, set in term of csv. If not specified, find from file './new.csv' for default.
+    -i : Specify the IP address(es) of the host(s), if multiple, set in term of csv.
+    -g : Specify the ansible group to make.
+    -o : Overwrite the ansible group or not, 'false' for default. 
     -a : Specify the ansible host file. If not specified, use '/etc/ansible/hosts' for default.
 USAGE
 exit 0
 }
 # Get Opts
-while getopts "hn:p:" opt; do # 选项后面的冒号表示该选项需要参数
+while getopts "hi:g:o:a:" opt; do # 选项后面的冒号表示该选项需要参数
     case "$opt" in
     h)  show_help
         ;;
-    m)  MASTERS=$OPTARG # 参数存在$OPTARG中
+    i)  HOSTS=$OPTARG # 参数存在$OPTARG中
         ;;
-    n)  NODES=$OPTARG
+    g)  GROUP=$OPTARG
         ;;
-    e)  NEW=$OPTARG
+    o)  OVERWRITE=$OPTARG
         ;;
     a)  ANSIBLE=$OPTARG
         ;;
@@ -28,6 +28,7 @@ while getopts "hn:p:" opt; do # 选项后面的冒号表示该选项需要参数
         ;;
     esac
 done
+[ -z "$*" ] && show_help
 chk_var () {
 if [ -z "$2" ]; then
   echo "$(date -d today +'%Y-%m-%d %H:%M:%S') - [ERROR] - no input for \"$1\", try \"$0 -h\"."
@@ -35,4 +36,29 @@ if [ -z "$2" ]; then
   exit 1
 fi
 }
-[ -z "$ANSIBLE" ] && ANSIBLE=/etc/ansible/hosts
+chk_var -i $HOSTS
+chk_var -g $GROUP
+ANSIBLE=${ANSIBLE:-"/etc/ansible/hosts"}
+DIR=${ANSIBLE%/*}
+echo $DIR
+mkdir -p $DIR
+[ -f $ANSIBLE ] || touch $ANSIBLE
+OVERWRITE=${OVERWRITE:-"false"}
+HOSTS=$(echo $HOSTS | tr "," " ")
+if cat $ANSIBLE | grep "\[$GROUP\]"; then
+  if $OVERWRITE; then 
+    cat $ANSIBLE | tr "\n" "?" | sed s/"\["/"\[%"/g | tr "[" "\n" | tr "%" "[" | sed /"\[$GROUP\]"/d | tr "?" "\n" | sed /"^$"/d > $ANSIBLE
+  else
+    echo "$(date -d today +'%Y-%m-%d %H:%M:%S') - [ERROR] - ${GROUP} already in ${ANSIBLE}."
+    echo " - still want to write, set '-o' flag to 'true'"
+    exit 1
+  fi
+fi
+cat >> $ANSIBLE <<EOF
+[$GROUP] 
+EOF
+for HOST in $HOSTS; do
+  cat >> $ANSIBLE <<EOF
+$HOST
+EOF
+done
