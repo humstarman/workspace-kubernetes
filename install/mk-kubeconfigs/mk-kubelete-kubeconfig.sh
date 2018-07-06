@@ -28,4 +28,4 @@ kubectl config set-context default \
   --kubeconfig=bootstrap.kubeconfig
 # 设置默认上下文
 kubectl config use-context default --kubeconfig=bootstrap.kubeconfig
-mv bootstrap.kubeconfig /etc/kubernetes/
+yes | mv bootstrap.kubeconfig /etc/kubernetes/

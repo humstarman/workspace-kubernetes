@@ -30,4 +30,4 @@ kubectl config set-context default \
   --kubeconfig=kube-proxy.kubeconfig
 # 设置默认上下文
 kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
-mv kube-proxy.kubeconfig /etc/kubernetes/
+yes | mv kube-proxy.kubeconfig /etc/kubernetes/
