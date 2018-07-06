@@ -6,7 +6,6 @@ NODE_EXISTENCE=false
 
 mkdir -p ./tmp
 BOOTSTRAP_TOKEN=$(head -c 16 /dev/urandom | od -An -t x | tr -d ' ')
-cp ./k8s.env ./tmp
 FILE=k8s.env
 cat > ./tmp/${FILE} <<"EOF"
 # TLS Bootstrapping 使用的Token，可以使用命令 head -c 16 /dev/urandom | od -An -t x | tr -d ' ' 生成
