@@ -9,3 +9,6 @@ build:
 
 test:
 	@curl http://127.0.0.1:$(PORT)/v2/_catalog
+
+all: build test
+
