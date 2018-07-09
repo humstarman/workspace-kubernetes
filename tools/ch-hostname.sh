@@ -3,7 +3,7 @@ show_help () {
 cat << USAGE
 usage: $0 [ -n NETWORK-ID ] [ -p HOSTNAME-PREFIX ]
     -n : Specify the net ID, 
-    -p : Specify the hostname prefix. If not specified, use 'node-' for default.
+    -p : Specify the hostname prefix. If not specified, use 'node-' by default.
 USAGE
 exit 0
 }

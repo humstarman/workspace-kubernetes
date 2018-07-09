@@ -6,7 +6,7 @@ usage: $0 [ -m MASTER(S) ] [ -v VIRTUAL-IP ] [ -e EXECUTABLE-SCRIPT-TO-CHECK-HAP
     -m : Specify the IP address(es) of Master node(s). If multiple, set the images in term of csv, 
          as 'master-ip-1,master-ip-2,master-ip-3'.
     -v : Specify the virtual IP address, 
-    -c : Specify the executable script for checking haproxy component. If not specified, use 'chk.sh' for default.
+    -c : Specify the executable script for checking haproxy component. If not specified, use 'chk.sh' by default.
 USAGE
 exit 0
 }

@@ -5,8 +5,8 @@ usage: $0 [ -d DOCKER-IMAGE(S) ] [ -i LOCAL-DOCKER-REGISTRY-IP ] [ -p LOCAL-DOCK
     -d : Specify the image(s) to pull. If multiple, set the images in term of csv, 
          as 'image-1,image-2,image-3'.
     -i : Specify the IP address of local docker registry. 
-    -p : Specify the port used by local docker registry. If not specified, use '5000' for default.
-    -g : Specify the group used by ansible. If not specified, use 'all' for default.
+    -p : Specify the port used by local docker registry. If not specified, use '5000' by default.
+    -g : Specify the group used by ansible. If not specified, use 'all' by default.
 USAGE
 exit 0
 }
