@@ -4,7 +4,7 @@ cat << USAGE
 usage: $0 [ -m MASTER-IP(S) ] [ -n NODE-IP(S) ] [ -a ANSIBLE-HOST-FILE ]
     -i : Specify the IP address(es) of the host(s), if multiple, set in term of csv.
     -g : Specify the ansible group to make.
-    -o : Overwrite the ansible group or not, 'false' for default. 
+    -o : Overwrite the ansible group or not, no overwriting for default. 
     -a : Specify the ansible host file. If not specified, use '/etc/ansible/hosts' for default.
 USAGE
 exit 0
@@ -47,7 +47,28 @@ OVERWRITE=${OVERWRITE:-"false"}
 HOSTS=$(echo $HOSTS | tr "," " ")
 if cat $ANSIBLE | grep "\[$GROUP\]"; then
   if $OVERWRITE; then 
-    cat $ANSIBLE | tr "\n" "?" | sed s/"\["/"\[%"/g | tr "[" "\n" | tr "%" "[" | sed /"\[$GROUP\]"/d | tr "?" "\n" | sed /"^$"/d > $ANSIBLE
+    #cat $ANSIBLE | grep -v "^#" | grep "^\[" |tr "\n" "?" | sed s/"\["/"\[%"/g | tr "[" "\n" | tr "%" "[" | sed /"\[$GROUP\]"/d | tr "?" "\n" | sed /"^$"/d > $ANSIBLE
+    #cat $ANSIBLE | grep "^\[" |tr "\n" "?" | sed s/"\["/"\[%"/g | tr "[" "\n" | tr "%" "[" | sed /"\[$GROUP\]"/d | tr "?" "\n" | sed /"^$"/d > $ANSIBLE
+    FROMS=$(sed -n -e /"^\[${GROUP}"/= $ANSIBLE)
+    for TMP in $FROMS; do
+      FROM=$(sed -n -e /"^\[${GROUP}"/= $ANSIBLE)
+      FROM=$(echo $FROM | awk -F ' ' '{print $1}')
+      TARGETS=$(sed -n -e /"^\["/= $ANSIBLE)
+      FOUND_BIGGER=false
+      for i in $TARGETS; do
+        if [[ "$i" > "$FROM" ]]; then
+          TARGET=$i
+          FOUND_BIGGER=true
+          break;
+        fi
+      done
+      if $FOUND_BIGGER; then
+        TO=$[$TARGET-1]
+      else
+        TO='$'
+      fi
+      sed  -i "${FROM},${TO}"d $ANSIBLE 
+    done
   else
     echo "$(date -d today +'%Y-%m-%d %H:%M:%S') - [ERROR] - ${GROUP} already in ${ANSIBLE}."
     echo " - still want to write, set '-o' flag"
