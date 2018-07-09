@@ -10,7 +10,7 @@ USAGE
 exit 0
 }
 # Get Opts
-while getopts "hi:g:o:a:" opt; do # 选项后面的冒号表示该选项需要参数
+while getopts "hi:g:oa:" opt; do # 选项后面的冒号表示该选项需要参数
     case "$opt" in
     h)  show_help
         ;;
@@ -18,7 +18,7 @@ while getopts "hi:g:o:a:" opt; do # 选项后面的冒号表示该选项需要�
         ;;
     g)  GROUP=$OPTARG
         ;;
-    o)  OVERWRITE=$OPTARG
+    o)  OVERWRITE=true
         ;;
     a)  ANSIBLE=$OPTARG
         ;;
@@ -50,7 +50,7 @@ if cat $ANSIBLE | grep "\[$GROUP\]"; then
     cat $ANSIBLE | tr "\n" "?" | sed s/"\["/"\[%"/g | tr "[" "\n" | tr "%" "[" | sed /"\[$GROUP\]"/d | tr "?" "\n" | sed /"^$"/d > $ANSIBLE
   else
     echo "$(date -d today +'%Y-%m-%d %H:%M:%S') - [ERROR] - ${GROUP} already in ${ANSIBLE}."
-    echo " - still want to write, set '-o' flag to 'true'"
+    echo " - still want to write, set '-o' flag"
     exit 1
   fi
 fi
