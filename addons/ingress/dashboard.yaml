@@ -1,14 +1,14 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: https-ingress
+  name: dashboard 
   namespace: kube-system 
   annotations: 
     ingress.kubernetes.io/ssl-passthrough: "true"
     nginx.ingress.kubernetes.io/secure-backends: "true"
 spec:
   rules:
-  - host: my.dash.me
+  - host: gmt.dash.me
     http:
       paths:
       - path: /

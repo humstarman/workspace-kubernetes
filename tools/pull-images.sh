@@ -10,7 +10,7 @@ usage: $0 [ -d DOCKER-IMAGE(S) ] [ -i LOCAL-DOCKER-REGISTRY-IP ] [ -p LOCAL-DOCK
 USAGE
 exit 0
 }
-[ -z "$@" ] && show_help
+[ -z "$*" ] && show_help
 # Get Opts
 while getopts "hd:i:p:g:" opt; do # 选项后面的冒号表示该选项需要参数
     case "$opt" in

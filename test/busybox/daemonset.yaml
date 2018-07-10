@@ -1,0 +1,20 @@
+---
+apiVersion: extensions/v1beta1 
+kind: DaemonSet
+metadata:
+  name: busybox-ds
+  labels:
+    addonmanager.kubernetes.io/mode: Reconcile
+spec:
+  template:
+    metadata:
+      labels:
+        app: busybox-ds
+    spec:
+      containers:
+      - name: my-busybox 
+        image: busybox:latest
+        command:
+        - /bin/sh
+        - -c 
+        - "while true; do sleep 60; done"

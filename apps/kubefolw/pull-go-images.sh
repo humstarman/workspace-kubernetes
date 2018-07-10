@@ -1,22 +1,61 @@
 #!/bin/sh
-
 set -e
-
-if [ ! -x "$(command -v docker)" ]; then
-  echo "$(date) - [ERROR] - no docker installed!"
+show_help () {
+cat << USAGE
+usage: $0 [ -d DOCKER-IMAGE(S) ] [ -i LOCAL-DOCKER-REGISTRY-IP ] [ -p LOCAL-DOCKER-REGISTRY-PROT ] 
+       [ -u PUBLIC-DOCKER-HUB-PREFIX ] [ -g ANSIBLE-GROUP ]
+    -d : Specify the image(s) to pull. If multiple, set the images in term of csv, 
+         as 'image-1,image-2,image-3'.
+    -i : Specify the IP address of local docker registry. 
+    -p : Specify the port used by local docker registry. If not specified, use '5000' by default.
+    -g : Specify the prefix fo docker hub. If not specified, use 'lowyard' by default.
+    -g : Specify the group used by ansible. If not specified, use 'all' by default.
+USAGE
+exit 0
+}
+[ -z "$*" ] && show_help
+# Get Opts
+while getopts "hd:i:p:g:u:" opt; do # 选项后面的冒号表示该选项需要参数
+    case "$opt" in
+    h)  show_help
+        ;;
+    d)  IMAGES=$OPTARG # 参数存在$OPTARG中
+        ;;
+    i)  LOCAL_REGISTRY_IP=$OPTARG
+        ;;
+    p)  LOCAL_REGISTRY_PORT=$OPTARG
+        ;;
+    u)  DOCKER_HUB=$OPTARG
+        ;;
+    g)  GROUP=$OPTARG
+        ;;
+    ?)  # 当有不认识的选项的时候arg为?
+        echo "unkonw argument"
+        exit 1
+        ;;
+    esac
+done
+chk_var () {
+if [ -z "$2" ]; then
+  echo "$(date -d today +'%Y-%m-%d %H:%M:%S') - [ERROR] - no input for \"$1\", try \"$0 -h\"."
   sleep 3
   exit 1
 fi
-if [ ! -x "$(command -v ansible)" ]; then
-  echo "$(date) - [ERROR] - no ansible installed!"
+}
+chk_var -i $LOCAL_REGISTRY_IP
+chk_install () {
+if [ ! -x "$(command -v $1)" ]; then
+  echo "$(date -d today +'%Y-%m-%d %H:%M:%S') - [ERROR] - no $1 installed !!!"
   sleep 3
   exit 1
 fi
-
-LOCAL_REPO="172.31.78.217:5000"
-DOCKER_HUB="lowyard"
-
-IMAGES="$*"
+}
+NEEDS="docker ansible"
+for NEED in $NEEDS; do
+  chk_install $NEED
+done
+DOCKER_HUB=${DOCKER_HUB:-"lowyard"}
+GROUP=${GROUP:-"all"}
 if [ -z "$IMAGES" ]; then
   IMAGES="k8s.gcr.io/hyperkube:v1.0.7 \
   gcr.io/kubeflow-images-public/tf-model-server-http-proxy:v20180327-995786ec \
@@ -33,8 +72,7 @@ if [ -z "$IMAGES" ]; then
   gcr.io/kubeflow-images-public/tensorflow-1.4.1-notebook-cpu:v20180419-0ad94c4e \
   gcr.io/kubeflow/tensorflow-notebook-cpu"
 fi
-
-function pull_distribute_tag() {
+pull_distribute_tag() {
   NAME=${IMAGE##*/}
   #echo $NAME
   PULLABLE=${DOCKER_HUB}/$NAME 
@@ -52,14 +90,13 @@ function pull_distribute_tag() {
   echo "$(date) - [INFO] - rename $PULLABLE as ${LOCAL_REPO}/$NAME."
   docker push ${LOCAL_REPO}/$NAME
   echo "$(date) - [INFO] - image ${LOCAL_REPO}/$NAME pushed."
-  ansible other -m shell -a "docker pull ${LOCAL_REPO}/$NAME"
+  ansible $GROUP -m shell -a "docker pull ${LOCAL_REPO}/$NAME"
   echo "$(date) - [INFO] - image ${LOCAL_REPO}/$NAME pulled at all nodes."
-  ansible other -m shell -a "docker tag ${LOCAL_REPO}/$NAME $IMAGE"
+  ansible $GROUP -m shell -a "docker tag ${LOCAL_REPO}/$NAME $IMAGE"
   echo "$(date) - [INFO] - rename image ${LOCAL_REPO}/$NAME as ${IMAGE} at all nodes."
-  ansible other -m shell -a "docker rmi ${LOCAL_REPO}/$NAME"
+  ansible $GROUP -m shell -a "docker rmi ${LOCAL_REPO}/$NAME"
   echo "$(date) - [INFO] - delete temporary image ${LOCAL_REPO}/$NAME at all nodes."
 }
-
 for IMAGE in $IMAGES; do
   pull_distribute_tag $IMAGE
 done
