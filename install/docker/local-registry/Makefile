@@ -12,3 +12,6 @@ test:
 
 all: build test
 
+clean:
+	@docker stop $(NAME) 
+	@docker rm $(NAME)

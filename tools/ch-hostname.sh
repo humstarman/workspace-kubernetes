@@ -3,7 +3,7 @@ show_help () {
 cat << USAGE
 usage: $0 [ -n NETWORK-ID ] [ -p HOSTNAME-PREFIX ]
     -n : Specify the net ID, 
-    -p : Specify the hostname prefix. If not specified, use 'node-' by default.
+    -p : Specify the hostname prefix. If not specified, use 'node-' for default.
 USAGE
 exit 0
 }
@@ -41,7 +41,8 @@ ID=$(hostname --all-ip-address)
 ID=${ID#*${NET_ID}}
 ID=${ID%% *}
 IP=${NET_ID}$ID
-HOSTNAME="${PREFIX}${IP}"
+ID=${IP##*.}
+HOSTNAME="${PREFIX}${ID}"
 cat > /etc/hostname << EOF
 $HOSTNAME
 EOF
