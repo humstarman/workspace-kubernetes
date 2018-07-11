@@ -64,7 +64,6 @@ if cat $ANSIBLE | grep "\[$GROUP\]"; then
     sed  -i "${FROM},${TO}"d $ANSIBLE 
   done
 else
-  echo "$(date -d today +'%Y-%m-%d %H:%M:%S') - [ERROR] - ${GROUP} already in ${ANSIBLE}."
-  echo " - still want to write, set '-o' flag"
-  exit 1
+  echo "$(date -d today +'%Y-%m-%d %H:%M:%S') - [WARN] - ${GROUP} not in ${ANSIBLE}."
+  sleep 3
 fi
