@@ -14,6 +14,9 @@ clean:
 	@ansible ${TMP} -m script -a "./scripts/rm-scripts.sh"
 	@./scripts/rm-ansible-group.sh -g ${TMP}
 
+local_clean:
+	@./scripts/rm-scripts.sh
+
 oldtest:
 	@./scripts/mk-scripts.sh -g all
 	@cat /etc/crontab
