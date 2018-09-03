@@ -9,9 +9,18 @@ check_install: export SCRIPT=${URL}/check-k8s-cluster.sh
 check_install:
 	@curl ${SCRIPT} | /bin/bash
 
+deploy: export OP=create
 deploy:
-	@kubectl create -f ${MANIFEST}/dashboard-rbac.yaml
-	@kubectl create -f ${MANIFEST}/dashboard-configmap.yaml
-	@kubectl create -f ${MANIFEST}/dashboard-secret.yaml
-	@kubectl create -f ${MANIFEST}/dashboard-service.yaml
-	@kubectl create -f ${MANIFEST}/dashboard-controller.yaml
+	@kubectl ${OP} -f ${MANIFEST}/dashboard-rbac.yaml
+	@kubectl ${OP} -f ${MANIFEST}/dashboard-configmap.yaml
+	@kubectl ${OP} -f ${MANIFEST}/dashboard-secret.yaml
+	@kubectl ${OP} -f ${MANIFEST}/dashboard-service.yaml
+	@kubectl ${OP} -f ${MANIFEST}/dashboard-controller.yaml
+
+clean: export OP=delete
+clean:
+	@kubectl ${OP} -f ${MANIFEST}/dashboard-rbac.yaml
+	@kubectl ${OP} -f ${MANIFEST}/dashboard-configmap.yaml
+	@kubectl ${OP} -f ${MANIFEST}/dashboard-secret.yaml
+	@kubectl ${OP} -f ${MANIFEST}/dashboard-service.yaml
+	@kubectl ${OP} -f ${MANIFEST}/dashboard-controller.yaml

@@ -4,14 +4,26 @@ all: deploy
 install: all
 
 deploy: export MANIFEST=./manifests
+deploy: export OP=create 
 deploy:
-	@kubectl create -f namespace.yaml
-	@kubectl create -f rbac.yaml
+	-@kubectl ${OP} -f ${MANIFEST}/namespace.yaml
+	@kubectl ${OP} -f ${MANIFEST}/rbac.yaml
 	@sleep 1
-	@kubectl create -f default-backend.yaml
-	@kubectl create -f configmap.yaml
-	@kubectl create -f tcp-services-configmap.yaml
-	@kubectl create -f udp-services-configmap.yaml
+	@kubectl ${OP} -f ${MANIFEST}/default-backend.yaml
+	@kubectl ${OP} -f ${MANIFEST}/configmap.yaml
+	@kubectl ${OP} -f ${MANIFEST}/tcp-services-configmap.yaml
+	@kubectl ${OP} -f ${MANIFEST}/udp-services-configmap.yaml
 	@sleep 1
-	@kubectl create -f service.yaml
-	@kubectl create -f with-rbac.yaml
+	@kubectl ${OP} -f ${MANIFEST}/service.yaml
+	@kubectl ${OP} -f ${MANIFEST}/with-rbac.yaml
+
+deploy: export OP=delete 
+clean:
+	@kubectl ${OP} -f ${MANIFEST}/rbac.yaml
+	@kubectl ${OP} -f ${MANIFEST}/default-backend.yaml
+	@kubectl ${OP} -f ${MANIFEST}/configmap.yaml
+	@kubectl ${OP} -f ${MANIFEST}/tcp-services-configmap.yaml
+	@kubectl ${OP} -f ${MANIFEST}/udp-services-configmap.yaml
+	@kubectl ${OP} -f ${MANIFEST}/service.yaml
+	@kubectl ${OP} -f ${MANIFEST}/with-rbac.yaml
+	@kubectl ${OP} -f ${MANIFEST}/namespace.yaml
