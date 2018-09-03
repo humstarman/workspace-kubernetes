@@ -3,12 +3,12 @@ set -e
 show_help () {
 cat << USAGE
 usage: $0 [ -d DOCKER-IMAGE(S) ] [ -i LOCAL-DOCKER-REGISTRY-IP ] [ -p LOCAL-DOCKER-REGISTRY-PROT ] 
-       [ -u PUBLIC-DOCKER-HUB-PREFIX ] [ -g ANSIBLE-GROUP ]
+          [ -u PUBLIC-DOCKER-HUB-PREFIX ] [ -g ANSIBLE-GROUP ]
     -d : Specify the image(s) to pull. If multiple, set the images in term of csv, 
          as 'image-1,image-2,image-3'.
     -i : Specify the IP address of local docker registry. 
     -p : Specify the port used by local docker registry. If not specified, use '5000' by default.
-    -g : Specify the prefix fo docker hub. If not specified, use 'lowyard' by default.
+    -u : Specify the prefix fo docker hub. If not specified, use 'lowyard' by default.
     -g : Specify the group used by ansible. If not specified, use 'all' by default.
 USAGE
 exit 0
@@ -56,6 +56,8 @@ for NEED in $NEEDS; do
 done
 DOCKER_HUB=${DOCKER_HUB:-"lowyard"}
 GROUP=${GROUP:-"all"}
+LOCAL_REGISTRY_PORT=${LOCAL_REGISTRY_PORT:-"5000"}
+LOCAL_REPO=${LOCAL_REGISTRY_IP}:${LOCAL_REGISTRY_PORT}
 if [ -z "$IMAGES" ]; then
   IMAGES="k8s.gcr.io/hyperkube:v1.0.7 \
   gcr.io/kubeflow-images-public/tf-model-server-http-proxy:v20180327-995786ec \

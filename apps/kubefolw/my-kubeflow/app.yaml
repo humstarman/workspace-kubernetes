@@ -1,0 +1,31 @@
+apiVersion: 0.2.0
+environments:
+  default:
+    destination:
+      namespace: kubeflow
+      server: https://192.168.100.240:443
+    k8sVersion: v1.11.0
+    path: default
+kind: ksonnet.io/app
+libraries:
+  core:
+    name: core
+    registry: kubeflow
+    version: b497fd581c823ba3911296ec58c072a48c57c474
+  tf-job:
+    name: tf-job
+    registry: kubeflow
+    version: b497fd581c823ba3911296ec58c072a48c57c474
+  tf-serving:
+    name: tf-serving
+    registry: kubeflow
+    version: b497fd581c823ba3911296ec58c072a48c57c474
+name: my-kubeflow
+registries:
+  incubator:
+    protocol: github
+    uri: github.com/ksonnet/parts/tree/master/incubator
+  kubeflow:
+    protocol: github
+    uri: github.com/kubeflow/kubeflow/tree/v0.1.2/kubeflow
+version: 0.0.1
