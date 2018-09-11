@@ -4,7 +4,7 @@ all: deploy
 install: all
 
 deploy: export MANIFEST=./manifests
-deploy: export OP=create 
+deploy: export OP=create
 deploy:
 	-@kubectl ${OP} -f ${MANIFEST}/namespace.yaml
 	@kubectl ${OP} -f ${MANIFEST}/rbac.yaml
@@ -17,7 +17,8 @@ deploy:
 	@kubectl ${OP} -f ${MANIFEST}/service.yaml
 	@kubectl ${OP} -f ${MANIFEST}/with-rbac.yaml
 
-deploy: export OP=delete 
+clean: export OP=delete 
+clean: export MANIFEST=./manifests
 clean:
 	@kubectl ${OP} -f ${MANIFEST}/rbac.yaml
 	@kubectl ${OP} -f ${MANIFEST}/default-backend.yaml
@@ -27,3 +28,9 @@ clean:
 	@kubectl ${OP} -f ${MANIFEST}/service.yaml
 	@kubectl ${OP} -f ${MANIFEST}/with-rbac.yaml
 	@kubectl ${OP} -f ${MANIFEST}/namespace.yaml
+
+test: export OP=create
+test: export MANIFEST=./manifests
+test:
+	-@kubectl ${OP} -f ${MANIFEST}/namespace.yaml
+
