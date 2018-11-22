@@ -10,6 +10,8 @@ ETCD_PEM=`cat ${SSL}/etcd.pem | base64 | tr -d '\n'`
 CA_PEM=`cat ${SSL}/ca.pem | base64 | tr -d '\n'`
 CLUSTER_CIDR="172.30.0.0/16"
 
+all: sed deploy 
+
 sed:
 	@yes | cp ./manifest/rbac.yaml.sed ./manifest/rbac.yaml
 	@yes | cp ./manifest/calico.yaml.sed ./manifest/calico.yaml
@@ -32,8 +34,6 @@ clean:
 	@kubectl delete -f ./manifest/calico.yaml
 	@rm -f ./manifest/calico.yaml
 	@rm -f ./manifest/rbac.yaml
-
-all: sed deploy 
 
 test: export FILE="test.log"
 test:

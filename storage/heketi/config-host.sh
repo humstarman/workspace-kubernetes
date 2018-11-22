@@ -20,13 +20,6 @@ iptables -A heketi -p tcp -m state --state NEW -m tcp --dport 24007 -j ACCEPT
 iptables -A heketi -p tcp -m state --state NEW -m tcp --dport 24008 -j ACCEPT
 iptables -A heketi -p tcp -m state --state NEW -m tcp --dport 2222 -j ACCEPT
 iptables -A heketi -p tcp -m state --state NEW -m multiport --dports 49152:49251 -j ACCEPT
-if $VIRTUAL_DISK; then
-  IMG=/home/glusterfs.img
-  DEV=/dev/loop0
-  [ -f $IMG ] || dd if=/dev/zero of=${IMG} bs=1M count=$[100*1000] 
-  losetup $DEV $IMG
-  pvcreate -y $DEV
-fi
 EOF
 chmod +x /usr/local/bin/${BIN}
 # mk mod-for-glusterfs.service

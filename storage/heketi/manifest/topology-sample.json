@@ -6,17 +6,17 @@
           "node": {
             "hostnames": {
               "manage": [
-                "192.168.100.162"
+                "192.168.100.165"
               ],
               "storage": [
-                "192.168.100.162"
+                "192.168.100.165"
               ]
             },
             "zone": 1
           },
           "devices": [
             {
-              "name": "/dev/loop0",
+              "name": "/dev/sdb",
               "destroydata": false
             }
           ]
@@ -35,7 +35,7 @@
           },
           "devices": [
             {
-              "name": "/dev/loop0",
+              "name": "/dev/sdb",
               "destroydata": false
             }
           ]
@@ -54,7 +54,7 @@
           },
           "devices": [
             {
-              "name": "/dev/loop0",
+              "name": "/dev/sdb",
               "destroydata": false
             }
           ]
