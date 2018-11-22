@@ -16,6 +16,7 @@ deploy:
 	@kubectl ${OP} -f ${MANIFEST}/dashboard-secret.yaml
 	@kubectl ${OP} -f ${MANIFEST}/dashboard-service.yaml
 	@kubectl ${OP} -f ${MANIFEST}/dashboard-controller.yaml
+	@kubectl ${OP} -f ${MANIFEST}/dashboard-ingress.yaml
 
 clean: export OP=delete
 clean:
@@ -24,3 +25,4 @@ clean:
 	@kubectl ${OP} -f ${MANIFEST}/dashboard-secret.yaml
 	@kubectl ${OP} -f ${MANIFEST}/dashboard-service.yaml
 	@kubectl ${OP} -f ${MANIFEST}/dashboard-controller.yaml
+	@kubectl ${OP} -f ${MANIFEST}/dashboard-ingress.yaml

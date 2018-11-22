@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # stop svc
+systemctl daemon-reload 
 systemctl stop etcd
 
 # clear files

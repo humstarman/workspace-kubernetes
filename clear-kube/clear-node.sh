@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # stop svc
+systemctl daemon-reload
 systemctl stop kubelet kube-proxy flanneld docker
 
 # clear files

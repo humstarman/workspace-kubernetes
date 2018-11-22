@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # stop svc
+systemctl daemon-reload
 systemctl stop kube-apiserver kube-controller-manager kube-scheduler
 
 # clear files
