@@ -44,7 +44,7 @@ if [ ! -x "$(command -v $1)" ]; then
   exit 1
 fi
 }
-NEEDS="ansible"
+NEEDS="kubectl ansible"
 for NEED in $NEEDS; do
   chk_install $NEED
 done
