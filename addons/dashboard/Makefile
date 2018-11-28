@@ -2,12 +2,8 @@ SHELL=/bin/bash
 URL=https://raw.githubusercontent.com/humstarman/ikube-scripts/master
 MANIFEST=./manifests
 
-all: check_install deploy
+all: deploy
 install: all
-
-check_install: export SCRIPT=${URL}/check-k8s-cluster.sh
-check_install:
-	@curl ${SCRIPT} | /bin/bash
 
 deploy: export OP=create
 deploy:
