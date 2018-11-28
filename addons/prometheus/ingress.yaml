@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: prometheus-web-ui 
+  namespace: monitoring 
+spec:
+  rules:
+  - host: gmt.prometheus.me 
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: prometheus 
+          servicePort: 9090 
