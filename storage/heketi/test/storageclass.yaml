@@ -6,7 +6,7 @@ metadata:
     storageclass.kubernetes.io/is-default-class: "true"
 provisioner: kubernetes.io/glusterfs
 parameters:
-  resturl: "http://10.254.148.35:8080"
+  resturl: "http://10.254.197.155:8080"
   restuser: "admin"
   gidMin: "40000"
   gidMax: "50000"

@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: logging 
+  namespace: kube-system
+  labels:
+    k8s-app: elasticsearch-logging
+  annotations: 
+    nginx.ingress.kubernetes.io/auth-url: "https://httpbin.org/basic-auth/root/9ol.8ik,"
+spec:
+  rules:
+  - host: gmt.es.me
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: elasticsearch-logging 
+          servicePort: 9200 
+  - host: gmt.log.me
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kibana-logging 
+          servicePort: 5601  

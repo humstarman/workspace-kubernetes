@@ -26,10 +26,22 @@ while getopts "hk:g:" opt; do # 选项后面的冒号表示该选项需要参数
 done
 
 [[ -z $* ]] && show_help
+info() {
+    echo $(date -d today +'%Y-%m-%d %H:%M:%S') - [INFO] - "$*"
+}
+
+error() {
+    echo $(date -d today +'%Y-%m-%d %H:%M:%S') - [ERROR] - "$*"
+}
+
+fail() {
+    error "$@"
+    exit 1
+}
 
 chk_var () {
 if [ -z "$2" ]; then
-  echo "$(date -d today +'%Y-%m-%d %H:%M:%S') - [ERROR] - no input for \"$1\", try \"$0 -h\"."
+  error no input for \"$1\", try \"$0 -h\".
   sleep 3
   exit 1
 fi
@@ -39,7 +51,7 @@ chk_var -g $GLUSTERFS
 
 chk_install () {
 if [ ! -x "$(command -v $1)" ]; then
-  echo "$(date -d today +'%Y-%m-%d %H:%M:%S') - [ERROR] - no $1 installed !!!"
+  error no $1 installed!!!
   sleep 3
   exit 1
 fi
@@ -49,8 +61,8 @@ for NEED in $NEEDS; do
   chk_install $NEED
 done
 
-echo "$(date -d today +'%Y-%m-%d %H:%M:%S') - [INFO] - Kubernetes group: ${KUBERNETES}"
-echo "$(date -d today +'%Y-%m-%d %H:%M:%S') - [INFO] - Glusterfs group: ${GLUSTERFS}"
+info Kubernetes group: ${KUBERNETES}
+info Glusterfs group: ${GLUSTERFS}
 
 # setp 1 
 # install glusterfs cli
@@ -72,8 +84,8 @@ else
   exit 1
 fi
 EOF
-#ansible ${KUBERNETES} -m script -a ./${FILE}
-#rm -f ./${FILE}
+ansible ${KUBERNETES} -m script -a ./${FILE}
+rm -f ./${FILE}
 
 # step 2
 # config host
@@ -119,8 +131,8 @@ systemctl daemon-reload
 systemctl enable $SVC
 systemctl restart $SVC
 ENDOFFILE
-#ansible ${KUBERNETES} -m script -a ./${FILE}
-#rm -f ./${FILE}
+ansible ${KUBERNETES} -m script -a ./${FILE}
+rm -f ./${FILE}
 
 # step 3
 # label the nodes

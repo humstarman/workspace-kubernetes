@@ -91,10 +91,6 @@
                   {
                     "name": "HEKETI_KUBE_GLUSTER_DAEMONSET",
                     "value": "y"
-                  },
-                  {
-                    "name": "BACKUPDB_PATH",
-                    "value": "/tmp"
                   }
                 ],
                 "ports": [
@@ -104,16 +100,8 @@
                 ],
                 "volumeMounts": [
                   {
-                    "mountPath": "/backupdb/heketi.db.gz",
-                    "name": "heketi-db-secret",
-                    "subPath": "heketi.db.gz",
-                    "readOnly": false
-                  },
-                  {
-                    "mountPath": "/tmpi/heketi.db.gz",
-                    "name": "heketi-db-secret",
-                    "subPath": "heketi.db.gz",
-                    "readOnly": false
+                    "mountPath": "/backupdb",
+                    "name": "heketi-db-secret"
                   },
                   {
                     "name": "db",
@@ -153,7 +141,6 @@
               {
                 "name": "heketi-db-secret",
                 "secret": {
-                  "defaultMode": 511,
                   "secretName": "heketi-db-backup"
                 }
               },

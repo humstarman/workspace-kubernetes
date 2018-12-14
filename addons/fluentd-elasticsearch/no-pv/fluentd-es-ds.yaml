@@ -8,25 +8,6 @@ metadata:
     kubernetes.io/cluster-service: "true"
     addonmanager.kubernetes.io/mode: Reconcile
 ---
-kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: fluentd-es
-  labels:
-    k8s-app: fluentd-es
-    kubernetes.io/cluster-service: "true"
-    addonmanager.kubernetes.io/mode: Reconcile
-rules:
-- apiGroups:
-  - ""
-  resources:
-  - "namespaces"
-  - "pods"
-  verbs:
-  - "get"
-  - "watch"
-  - "list"
----
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -92,8 +73,8 @@ spec:
         - name: varlibdockercontainers
           mountPath: /var/lib/docker/containers
           readOnly: true
-        - name: optdockercontainers
-          mountPath: /opt/docker/containers
+        - name: realvarlibdockercontainers
+          mountPath: /home/opt/docker/containers
           readOnly: true
         - name: config-volume
           mountPath: /etc/fluent/config.d
@@ -107,9 +88,9 @@ spec:
       - name: varlibdockercontainers
         hostPath:
           path: /var/lib/docker/containers
-      - name: optdockercontainers
+      - name: realvarlibdockercontainers
         hostPath:
-          path: /opt/docker/containers
+          path: /home/opt/docker/containers
       - name: config-volume
         configMap:
           name: fluentd-es-config-v0.1.4
