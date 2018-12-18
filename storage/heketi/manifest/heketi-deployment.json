@@ -110,7 +110,7 @@
                     "readOnly": false
                   },
                   {
-                    "mountPath": "/tmpi/heketi.db.gz",
+                    "mountPath": "/tmp/heketi.db.gz",
                     "name": "heketi-db-secret",
                     "subPath": "heketi.db.gz",
                     "readOnly": false
